@@ -17,8 +17,6 @@
     background-color: rgb(0, 102, 0, 0.5);
 }
 
-
-
 .tasks-column {
     position: static;
     flex-grow: 1;
@@ -32,6 +30,11 @@
     background-color: #EEE;
 }
 
+.task-box {
+    height: calc(100% - 48px);
+    overflow-y: scroll;
+}
+
 .task-list-title {
     text-align: center;
     padding: 10px;
@@ -41,11 +44,71 @@
 
 .task {
     position: relative;
-    width: 95%;
-    margin: 10px auto;
+    margin: 10px;
     padding: 10px;
     border: 1px solid #000;
-    border-radius: 10px;
+    border-radius: 5px;
     background-color: #fff;
-    z-index: 5;
+    z-index: 1;
 }
+
+.subtask {
+    @extend .task;
+    width: 80%;
+    margin: 10px 10px 10px auto;
+    padding: 7px;
+    align-self: flex-end;
+}
+
+.task-row {
+    display: flex;
+    justify-content: space-between;
+}
+
+.new-task-add {
+    display: block;
+    width: 160px;
+    height: 70px;
+    margin: 10px auto;
+    border: 1px solid black;
+    border-radius: 5px;
+    background-color: #fff;
+}
+
+.new-task-form {
+    position: fixed;
+    width: 800px;
+    max-width: 90%;
+    height: 300px;
+	top: 0px;
+	bottom: 0px;
+	left: 0px;
+	right: 0px;
+    margin: auto;
+    border: 1px solid black;
+    border-radius: 5px;
+    background-color: #fff;
+    z-index: 3;
+}
+
+.new-task-form-block {
+    display: flex;
+    width: 100%;
+}
+
+.new-task-form__item {
+    border: 2px solid #000;
+    border-radius: 4px;
+    height: 40px;
+    width: 100%;
+    margin:10px;
+    padding: 10px;
+}
+
+.new-task-form_textarea {
+    height: 150px;
+}
+
+input:invalid:not(:placeholder-shown) {border-color: red;}
+input:valid:not(:placeholder-shown) {border-color: green;}
+
