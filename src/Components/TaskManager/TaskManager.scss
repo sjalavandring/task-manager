@@ -20,6 +20,7 @@
 .tasks-column {
     position: static;
     flex-grow: 1;
+    max-width: 34%;
     height: 100%;
     border: 1px solid black;
 }
@@ -63,6 +64,7 @@
 .task-row {
     display: flex;
     justify-content: space-between;
+    align-items: center;
 }
 
 .new-task-add {
@@ -103,6 +105,10 @@
     width: 100%;
     margin:10px;
     padding: 10px;
+}
+
+.task-title {
+    font-size: 20px;
 }
 
 .new-task-form_textarea {

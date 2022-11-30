@@ -36,11 +36,11 @@ let taskListInfo: taskListType[] = [
     {id: 1, status: "Queue", tasks: [
         {
             id: 1, 
-            title: "Task1", 
+            title: "Test tusk number one", 
             dateOfCreate: (new Date()).toISOString().slice(0,10),
             type: "task",
             description: "test description, test description, test description",
-            priority: 1,
+            priority: 3,
             subtasks: [{
                 id: 1,
                 type: "subtask",
