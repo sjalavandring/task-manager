@@ -31,6 +31,7 @@ function TaskManager () {
                                             return (
                                                 <div className="subtask" key={subtask.id}>
                                                     <div className="task-row">
+                                                        <img src="warningImg" alt="task-priority" />
                                                         <div className="task-row__item">{task.id + "." + subtask.id}</div>
                                                         <div className="task-row__item">{subtask.title}</div>
                                                         <div className="task-row__item">{subtask.dateOfCreate}</div>
@@ -48,25 +49,35 @@ function TaskManager () {
     })
 
     function Taskform () {
-        let [taskTitle, setTaskTitle] = useState('')
+        let [taskTitle, setTaskTitle] = useState('') 
         let [taskDescription, setTaskDescription] = useState('')
         let [taskPriority, setTaskPriority] = useState('')
 
-        function checkTargetValue(element: any) {
-            setTaskTitle((element.target.value).search(element.target.pattern) != -1 ? element.target.value : "" )
+        function addNewTask() {
+            if (taskTitle != "" && taskPriority != "") {
+                if (taskDescription != "") {
+                    dispatch({type: "add_task", description: 'testdesc', title: "testtitle", priority: 2})
+                } else 
+                if (taskDescription == "") {
+                    dispatch({type: "add_task", title: "testtitle", priority: 2})
+                }
+                alert ("Задача успешно добавлена")
+            } else {
+                alert("Неверно введены данные")
+            }
         }
 
         return (
             <form className={"new-task-form " + (isTaskAdding ? "" : "inactive")}>
                 <div className="new-task-form-block">
-                    <input className="new-task-form__item" type="text" placeholder="Имя задачи (до 10 символов)" pattern="[A-Za-zА-Яа-яЁё]{1,10}" onChange={(e) => console.log(e.target.pattern)} required/>
-                    <input className="new-task-form__item" type="text" placeholder="Приоритет (от 1 до 3, где 1 - наибольший приоритет)" pattern="[1-3]" required/>
+                    <input className="new-task-form__item" type="text" placeholder="Имя задачи (до 10 символов)" pattern="[A-Za-zА-Яа-яЁё]{1,10}" onChange={(element) => setTaskTitle((element.target.value).search(element.target.pattern) != -1 ? element.target.value : '')} required/>
+                    <input className="new-task-form__item" type="text" placeholder="Приоритет (от 1 до 3, где 1 - наибольший приоритет)" pattern="[1-3]" onChange={(element) => setTaskPriority((element.target.value).search(element.target.pattern) != -1 ? element.target.value : '')} required/>
                 </div>
                 <div className="new-task-form-block">
-                    <input className="new-task-form__item new-task-form_textarea" type="textarea" placeholder="Имя задачи (до 100 символов)" pattern="[A-Za-zА-Яа-яЁё]{,100}"/>
+                    <input className="new-task-form__item new-task-form_textarea" type="textarea" placeholder="Имя задачи (до 100 символов)" pattern="[A-Za-zА-Яа-яЁё]{,100}" onChange={(element) => setTaskDescription((element.target.value).search(element.target.pattern) != -1 ? element.target.value : '')}/>
                 </div>
                 <div className="new-task-form-block">
-                    <button className='new-task-form__item submit_button' type="submit" onClick={() => {dispatch({type: "add_task", description: 'testdesc', title: "testtitle", priority: 2})}}>Создать задачу</button>
+                    <button className='new-task-form__item submit_button' type="submit" onClick={() => {addNewTask()}}>Создать задачу</button>
                 </div>  
             </form> 
         )

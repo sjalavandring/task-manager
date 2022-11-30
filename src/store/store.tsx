@@ -66,7 +66,6 @@ let taskInfoReducer = (state = taskListInfo, action: any) => {
                 description: action.description,
                 priority: action.priority,
             })
-            console.log({...state, tasks: newTasks})
             return [{...state[0], tasks: newTasks}, {...state[1]}, {...state[2]}]
         default: 
             return state
