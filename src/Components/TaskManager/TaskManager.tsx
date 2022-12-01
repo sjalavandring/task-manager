@@ -3,58 +3,36 @@ import warningImg from  '../../img/warning.jpg'
 import { useDrag, useDrop } from 'react-dnd';
 import { useSelector, useDispatch } from 'react-redux/es/exports'
 import type {taskListType} from './../../store/store';
+import Task from '../Task/Task';
+
+type storeState = {
+    taskInfoReducer: taskListType[],
+}
 
 
 function TaskManager () {
     const dispatch = useDispatch()
-    const taskListInfo = useSelector((state: taskListType[]) => state)
+    const taskListInfo = useSelector((state: storeState) => state.taskInfoReducer)
     let [isTaskAdding, setTaskAdding] = useState<boolean>(false)
     
-    let taskList = taskListInfo.map((column) => {
+    let taskList = taskListInfo.map((column, columnId) => {
         return (
-            <div className="tasks-column" >
+            <div className="tasks-column" key={columnId}>
                 <div className="tasks-list" >
-                        <div draggable="true" className={"task-list-title " + `column-${column.status}` }>{column.status}</div>
-                        <div className='task-box'>  
-                            {column.tasks.map((task) => {
-                                return (
-                                    <>
-                                        <div className="task task-container" key={task.id}>
-                                            <div className="task-row">
-                                                <div className="task-row__item task-title"><b>{`${task.id}. ${task.title}`}</b></div>
-                                                <div className="task-row__item">
-                                                    {[...Array(task.priority)].map((item) => {
-                                                        return (<img src={warningImg} alt="task-priority" width="25px" height="25px"/>)
-                                                    })}
-                                                </div>
-                                            </div>
-                                            <div className="task-row">
-                                                <div className="task-row__item">Создана: {task.dateOfCreate}</div>
-                                                {/* <div className="task-row__item">Завершена: {task.dateOfDone ? task.dateOfDone: '-'}</div> 
-                                                <div className="task-row__item">В разработке: {task.timeInDev ? task.timeInDev : '-'}</div> */}
-                                            </div>
-                                        </div>
-                                        {task.subtasks != undefined ? task.subtasks.map((subtask) => {
-                                            return (
-                                                <div className="subtask" key={subtask.id}>
-                                                    <div className="task-row">
-                                                        <div className="task-row__item">{task.id + "." + subtask.id}</div>                                                       
-                                                        <div className="task-row__item">{subtask.title}</div>
-                                                        <div className="task-row__item">{subtask.dateOfCreate}</div>
-                                                    </div>
-                                                </div>
-                                            )                                  
-                                        }) : ""}
-                                    </>
-                                )
-                            })}
+                    <div className={"task-list-title " + `column-${column.status}` }>{column.status}</div>
+                    <div className='task-box'>  
+                        {column.tasks.map((task, taskId) => {
+                            return (
+                                <Task currentStatus={columnId} currentTaskId={taskId} key={taskId}/>
+                            )
+                        })}
                     </div>
                 </div>
             </div>
         )
     })
 
-    function Taskform () {
+    function Taskform (props: any) {
         let [taskTitle, setTaskTitle] = useState('') 
         let [taskDescription, setTaskDescription] = useState('')
         let [taskPriority, setTaskPriority] = useState('')
@@ -68,7 +46,6 @@ function TaskManager () {
                     dispatch({type: "add_task", title: taskTitle, priority: parseInt(taskPriority)})
                 }
                 setTaskAdding(false)
-                alert ("Задача успешно добавлена")
             } else {
                 alert("Неверно введены данные")
             }
@@ -77,11 +54,11 @@ function TaskManager () {
         return (
             <form className={"new-task-form " + (isTaskAdding ? "" : "inactive")}>
                 <div className="new-task-form-block">
-                    <input className="new-task-form__item" type="text" placeholder="Имя задачи (до 30 символов)" pattern="[A-Za-zА-Яа-яЁё]{1,30}" onChange={(element) => setTaskTitle((element.target.value).search(element.target.pattern) != -1 ? element.target.value : '')} required/>
+                    <input className="new-task-form__item" type="text" placeholder="Имя задачи (до 30 символов)" pattern="[A-Za-zА-Яа-яЁё\s]{1,30}" onChange={(element) => setTaskTitle((element.target.value).search(element.target.pattern) != -1 ? element.target.value : '')} required/>
                     <input className="new-task-form__item" type="text" placeholder="Приоритет (от 1 до 3, где 1 - наибольший приоритет)" pattern="[1-3]" onChange={(element) => setTaskPriority((element.target.value).search(element.target.pattern) != -1 ? element.target.value : '')} required/>
                 </div>
                 <div className="new-task-form-block">
-                    <input className="new-task-form__item new-task-form_textarea" type="textarea" placeholder="Имя задачи (до 100 символов)" pattern="[A-Za-zА-Яа-яЁё]{,100}" onChange={(element) => setTaskDescription((element.target.value).search(element.target.pattern) != -1 ? element.target.value : '')}/>
+                    <textarea className="new-task-form__item new-task-form__textarea" maxLength={300}  placeholder="Описание задачи (до 300 символов)" onChange={(element) => setTaskDescription(element.target.value != '' ? element.target.value : "Описание не добавлено")}/>
                 </div>
                 <div className="new-task-form-block">
                     <button className='new-task-form__item submit_button' type="submit" onClick={() => {addNewTask()}}>Создать задачу</button>
@@ -93,7 +70,7 @@ function TaskManager () {
     return (
         <>
             <button className="new-task-add" onClick={() => {setTaskAdding(true)}}>Добавить задачу</button>
-            {isTaskAdding  ? <Taskform/> : null}
+            {isTaskAdding  ? <Taskform /> : null}
             <div className={isTaskAdding ? "shadowBack" : ""} onClick={() => {setTaskAdding(false)}}></div>
             <div className="task-manager wrapper">
                 <div className="task-manager-columns">
