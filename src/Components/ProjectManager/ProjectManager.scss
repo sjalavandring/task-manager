@@ -12,3 +12,18 @@
     text-decoration: none;
     color: #000;
 }
+
+.new-project-add {
+    display: block;
+    width: 200px;
+    height: 30px;
+    margin: 10px auto;
+    padding: 5px;
+    border: 2px solid black;
+    text-align: center;
+    cursor: pointer;
+}
+
+.new-project-form {
+    height: 130px !important;
+}

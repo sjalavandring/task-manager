@@ -9,18 +9,18 @@ type storeState = {
 }
 
 
-function Task (props: {currentTaskId: number, currentStatus: number}) {
+function Task (props: {projectId: number, currentTaskId: number, currentStatus: number}) {
     const dispatch = useDispatch()
+    const taskListInfo = useSelector((state: any) => state.taskInfoReducer[props.projectId].projectInfo)
     let isWindowOpened = useSelector((state: any) => state.modalWindowsReducer)
-    const taskListInfo = useSelector((state: storeState) => state.taskInfoReducer)
-    let task = taskListInfo[props.currentStatus].tasks[props.currentTaskId];
+    let [task, setTask] = useState(structuredClone(taskListInfo[props.currentStatus].tasks[props.currentTaskId]))
     let [isMoreInfoVisible, setMoreInfoVisible] = useState<boolean>(false)
     
     return (
         <>
-            <div className={"" + (isWindowOpened.isNewTaskAdding ? "shadowBack" : "")} onClick={() => dispatch({type: "toggle_new_subtask_window_status"})}></div>
-            {isWindowOpened.isNewTaskAdding  ? <NewSubtaskForm currentStatus={props.currentTaskId} currentTaskId={props.currentTaskId}/> : null}
-            <div className="task task-container" key={task.id}>
+            <div className={"" + (isWindowOpened.isNewSubtaskAdding ? "shadowBack" : "")} onClick={() => dispatch({type: "toggle_new_subtask_window_status"})}></div>
+            {isWindowOpened.isNewSubtaskAdding  ? <NewSubtaskForm projectId={props.projectId} currentStatus={props.currentTaskId} currentTaskId={props.currentTaskId}/> : null}
+            <div className="task task-container" key={task.id} onClick={() => console.log(props)}>
                 <div className="task-row">
                     <div className="task-row__item task-title"><b>{`${task.id}. ${task.title}`}</b></div>
                     <div className="task-row__item">
@@ -45,22 +45,22 @@ function Task (props: {currentTaskId: number, currentStatus: number}) {
                     </div>
                 </div> 
             </div>
-            {task.subtasks != undefined ? task.subtasks.map((subtask, subtaskId) => {
+            {taskListInfo[props.currentStatus].tasks[props.currentTaskId].subtasks != undefined ? task.subtasks.map((subtask: any, subtaskId: number) => {
                 return (
-                    <Subtask currentStatus={props.currentStatus} currentTaskId={props.currentTaskId} subtaskId={subtaskId} key={subtaskId}/>
+                    <Subtask projectId={props.projectId} currentStatus={props.currentStatus} currentTaskId={props.currentTaskId} subtaskId={subtaskId} key={subtaskId}/>
                 )                                  
             }) : ""}
         </>
     )
 }
 
-function Subtask (props: {currentTaskId: number, currentStatus: number, subtaskId: number}) {
-    const taskListInfo = useSelector((state: storeState) => state.taskInfoReducer)
+function Subtask (props: {projectId: number, currentTaskId: number, currentStatus: number, subtaskId: number}) {
+    const taskListInfo = useSelector((state: any) => state.taskInfoReducer[props.projectId].projectInfo)
     let [isMoreInfoVisible, setMoreInfoVisible] = useState<boolean>(false)
     let subtask = taskListInfo[props.currentStatus].tasks[props.currentTaskId].subtasks[props.subtaskId]
 
     return (
-        <div className="subtask" key={subtask.id}>
+        <div className="subtask" key={subtask.id} onClick={() => console.log(props)}>
             <div className="task-row">
                 <div className="task-row__item task-title"><b>{`${props.currentTaskId + 1}.${subtask.id}. ${subtask.title}`}</b></div>
                 <div className="task-row__item">
@@ -73,15 +73,15 @@ function Subtask (props: {currentTaskId: number, currentStatus: number, subtaskI
             </div>
             <div className="task-row">
                 <div className="task-row__item">Создана: {subtask.dateOfCreate}</div>
-                <div className="task-row__item task-showmore" onClick={() => setMoreInfoVisible(!isMoreInfoVisible)}>{isMoreInfoVisible ? "Скрыть": "Развернуть"}</div>
+                <div className="task-row__item task-interactive-button" onClick={() => setMoreInfoVisible(!isMoreInfoVisible)}>{isMoreInfoVisible ? "Скрыть": "Развернуть"}</div>
             </div>
             <div className={"" + (isMoreInfoVisible ? "" : "inactive")}>
                 <div className="task-row task-more-information">
                     <div className="task-row__item">{subtask.description}</div>
                 </div>
                 <div className="task-row">
-                    <div className="task-row__item">Завершена: asdasdasdass{subtask.dateOfDone ? subtask.dateOfDone: '-'}</div> 
-                    <div className="task-row__item">В разработке: asdasdasdasd{subtask.timeInDev ? subtask.timeInDev : '-'}</div>
+                    <div className="task-row__item">Завершена: {subtask.dateOfDone ? subtask.dateOfDone: '-'}</div> 
+                    <div className="task-row__item">В разработке: {subtask.timeInDev ? subtask.timeInDev : '-'}</div>
                 </div>
             </div> 
         </div>
