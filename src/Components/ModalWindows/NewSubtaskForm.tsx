@@ -8,10 +8,13 @@ type NewSubaskFormProps = {
 
 // currentStatus: number, currentTaskId: number, projectId: number
 
-function NewSubtaskForm () {
+function NewSubtaskForm (props: {currentStatus: number, currentTaskId: number, projectId: number, closeSubtasskform: any}) {
     const dispatch = useDispatch()
     let isWindowOpened = useSelector((state: any) => state.modalWindowsReducer)
     let newSubtaskInfo = structuredClone(useSelector((state: any) => state.changeNewSubtaskInfo))
+    function closeSubtasskform () {
+        props.closeSubtasskform()
+    }
 
     let [taskTitle, setTaskTitle] = useState('') 
     let [taskDescription, setTaskDescription] = useState('')
@@ -20,11 +23,12 @@ function NewSubtaskForm () {
     function addNewSubtask() {
         if (taskTitle != "" && taskPriority != "") {
             if (taskDescription != "") {
-                dispatch({type: "add_subtask", project: newSubtaskInfo.projectId, description: taskDescription, title: taskTitle, priority: parseInt(taskPriority), taskStatus: newSubtaskInfo.currentStatus, taskId: newSubtaskInfo.currentTaskId})
+                dispatch({type: "add_subtask", project: props.projectId, description: taskDescription, title: taskTitle, priority: parseInt(taskPriority), taskStatus: props.currentStatus, taskId: props.currentTaskId})
             } else 
             if (taskDescription == "") {
-                dispatch({type: "add_subtask", project: newSubtaskInfo.projectId, title: taskTitle, priority: parseInt(taskPriority), taskStatus: newSubtaskInfo.currentStatus, taskId: newSubtaskInfo.currentTaskId})
+                dispatch({type: "add_subtask", project: props.projectId, title: taskTitle, priority: parseInt(taskPriority), taskStatus: props.currentStatus, taskId: props.currentTaskId})
             }
+            closeSubtasskform()
             dispatch({type: "toggle_new_subtask_window_status"})
         } else {
             alert("Неверно введены данные")

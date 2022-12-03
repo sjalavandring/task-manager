@@ -15,11 +15,19 @@ function Task (props: {projectId: number, currentTaskId: number, currentStatus: 
     let isWindowOpened = useSelector((state: any) => state.modalWindowsReducer)
     let [task, setTask] = useState(structuredClone(taskListInfo[props.currentStatus].tasks[props.currentTaskId]))
     let [isMoreInfoVisible, setMoreInfoVisible] = useState<boolean>(false)
+
+    let [subtaskWindowVisible, setSubtaskWindowVisible] = useState(false)
+
+    function closeSubtasskform () {
+        setSubtaskWindowVisible(false)
+    }
+
+
     
     return (
         <>
-            {/* <div className={"" + (isWindowOpened.isNewSubtaskAdding ? "shadowBack" : "")} onClick={() => dispatch({type: "toggle_new_subtask_window_status"})}></div> */}
-            {isWindowOpened.isNewSubtaskAdding  ? <NewSubtaskForm projectId={props.projectId} currentStatus={props.currentStatus} currentTaskId={props.currentTaskId}/> : undefined}
+            <div className={isWindowOpened.isNewSubtaskAdding && subtaskWindowVisible ? "shadowBack " : ""} onClick={() => {dispatch({type: "toggle_new_subtask_window_status"}); setSubtaskWindowVisible(false)}}></div>
+            {isWindowOpened.isNewSubtaskAdding && subtaskWindowVisible ? <NewSubtaskForm projectId={props.projectId} currentStatus={props.currentStatus} currentTaskId={props.currentTaskId} closeSubtasskform={closeSubtasskform}/> : undefined}
             <div className="task task-container" key={task.id} onClick={() => console.log(props, props.currentStatus)}>
                 <div className="task-row">
                     <div className="task-row__item task-title"><b>{`${task.id}. ${task.title}`}</b></div>
@@ -32,12 +40,12 @@ function Task (props: {projectId: number, currentTaskId: number, currentStatus: 
                 
                 <div className="task-row">
                     <div className="task-row__item">Создана: {task.dateOfCreate}</div>
-                    <div className="task-row__item task-interactive-button" onClick={() => {dispatch({type: "toggle_new_subtask_window_status"}); dispatch({type: "change_new_subtask_info", projectId: props.projectId, currentStatus: props.currentStatus, currentTaskId: props.currentTaskId})}}>+ Подзадача</div>
+                    <div className="task-row__item task-interactive-button" onClick={() => {dispatch({type: "toggle_new_subtask_window_status"}); setSubtaskWindowVisible(true)}}>+ Подзадача</div>
                     <div className="task-row__item task-interactive-button" onClick={() => setMoreInfoVisible(!isMoreInfoVisible)}>{isMoreInfoVisible ? "Скрыть": "Развернуть"}</div>
                 </div>
                 <div className={"" + (isMoreInfoVisible ? "" : "inactive")}>
                     <div className="task-row task-more-information">
-                        <div className="task-row__item">{task.description}</div>
+                        <div className="task-row__item">{task.description ? task.description : "Описание не задано"}</div>
                     </div>
                     <div className="task-row">
                         <div className="task-row__item">Завершена: {task.dateOfDone ? task.dateOfDone: '-'}</div> 
@@ -45,7 +53,7 @@ function Task (props: {projectId: number, currentTaskId: number, currentStatus: 
                     </div>
                 </div> 
             </div>
-            {taskListInfo[props.currentStatus].tasks[props.currentTaskId].subtasks != undefined ? task.subtasks.map((subtask: any, subtaskId: number) => {
+            {taskListInfo[props.currentStatus].tasks[props.currentTaskId].subtasks != undefined ? taskListInfo[props.currentStatus].tasks[props.currentTaskId].subtasks.map((subtask: any, subtaskId: number) => {
                 return (
                     <Subtask projectId={props.projectId} currentStatus={props.currentStatus} currentTaskId={props.currentTaskId} subtaskId={subtaskId} key={subtaskId}/>
                 )                                  
@@ -58,6 +66,8 @@ function Subtask (props: {projectId: number, currentTaskId: number, currentStatu
     const taskListInfo = useSelector((state: any) => state.taskInfoReducer[props.projectId].projectInfo)
     let [isMoreInfoVisible, setMoreInfoVisible] = useState<boolean>(false)
     let subtask = taskListInfo[props.currentStatus].tasks[props.currentTaskId].subtasks[props.subtaskId]
+
+    console.log(100)
 
     return (
         <div className="subtask" key={subtask.id} onClick={() => console.log(props)}>
@@ -77,7 +87,7 @@ function Subtask (props: {projectId: number, currentTaskId: number, currentStatu
             </div>
             <div className={"" + (isMoreInfoVisible ? "" : "inactive")}>
                 <div className="task-row task-more-information">
-                    <div className="task-row__item">{subtask.description}</div>
+                    <div className="task-row__item">{subtask.description ? subtask.description : "Описание не задано"}</div>
                 </div>
                 <div className="task-row">
                     <div className="task-row__item">Завершена: {subtask.dateOfDone ? subtask.dateOfDone: '-'}</div> 

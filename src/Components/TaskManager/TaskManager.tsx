@@ -38,8 +38,7 @@ function TaskManager (props: {projectId: number}) {
         <>
             <button className="new-task-add" onClick={() => dispatch({type: "toggle_new_task_window_status"})}>Добавить задачу</button>
             {isWindowOpened.isNewTaskAdding  ? <NewTaskForm projectId={props.projectId}/> : null}
-            {isWindowOpened.isNewSubtaskAdding  ? <NewSubtaskForm/> : undefined}
-            <div className={isWindowOpened.isNewTaskAdding || isWindowOpened.isNewSubtaskAdding ? "shadowBack" : ""} onClick={() => dispatch({type: "reset_all"})}></div>
+            <div className={isWindowOpened.isNewTaskAdding ? "shadowBack" : ""} onClick={() => dispatch({type: "toggle_new_task_window_status"})}></div>
             <div className="task-manager wrapper">
                 <div className="task-manager-columns">
                     {taskList}

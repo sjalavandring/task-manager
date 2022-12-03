@@ -16,7 +16,7 @@ function ProjectManager () {
     return (
         <div className="project-manager wrapper">
             <h1 className="project-manager-title">Менеджер проектов</h1>
-            <button className="new-project-add" onClick={() => dispatch({type: "toggle_new_project_window_status"})}>Добавить проект</button >
+            <button className="new-project-add" onClick={() => {dispatch({type: "toggle_new_project_window_status"}); console.log(100)}}>Добавить проект</button >
             <div className={isWindowOpened.isNewProjectAdding ? "shadowBack" : ""} onClick={() => dispatch({type: "toggle_new_project_window_status"})}></div>
             {isWindowOpened.isNewProjectAdding  ? <NewProjectForm /> : null}
             <div className="project-list">

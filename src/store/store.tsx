@@ -81,26 +81,6 @@ let modalWindowsStatus = {
     isNewProjectAdding: false,
 }
 
-let newSubtaskInfo = {
-    projectId: 0,
-    currentStatus: 0,
-    currentTaskId: 0,
-}
-
-let changeNewSubtaskReducer = (state = newSubtaskInfo, action: any) => {
-    switch (action.type) {
-        case "change_new_subtask_info": 
-            return {
-                ...state,
-                projectId: action.projectId,
-                currentStatus: action.currentStatus,
-                currentTaskId: action.currentTaskId,
-            }
-        default:
-            return state
-    }
-}
-
 let taskInfoReducer = (state = taskListInfo, action: any) => {
     let newState = structuredClone(state);
     switch (action.type) {
@@ -183,7 +163,7 @@ let projectsInfoReducer = (state = taskListInfo, action: any) => {
     }
 }
 
-const rootReducer = combineReducers({taskInfoReducer, modalWindowsReducer, projectsInfoReducer, changeNewSubtaskReducer})
+const rootReducer = combineReducers({taskInfoReducer, modalWindowsReducer, projectsInfoReducer})
 
 const store = createStore(rootReducer)
 
