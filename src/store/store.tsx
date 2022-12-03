@@ -82,12 +82,23 @@ let modalWindowsStatus = {
 }
 
 let newSubtaskInfo = {
-        id: 1,
-        type: "subtask",
-        title: "",
-        dateOfCreate: (new Date()).toISOString().slice(0,10),
-        description: "",
-        priority: 1,
+    projectId: 0,
+    currentStatus: 0,
+    currentTaskId: 0,
+}
+
+let changeNewSubtaskReducer = (state = newSubtaskInfo, action: any) => {
+    switch (action.type) {
+        case "change_new_subtask_info": 
+            return {
+                ...state,
+                projectId: action.projectId,
+                currentStatus: action.currentStatus,
+                currentTaskId: action.currentTaskId,
+            }
+        default:
+            return state
+    }
 }
 
 let taskInfoReducer = (state = taskListInfo, action: any) => {
@@ -172,7 +183,7 @@ let projectsInfoReducer = (state = taskListInfo, action: any) => {
     }
 }
 
-const rootReducer = combineReducers({taskInfoReducer, modalWindowsReducer, projectsInfoReducer})
+const rootReducer = combineReducers({taskInfoReducer, modalWindowsReducer, projectsInfoReducer, changeNewSubtaskReducer})
 
 const store = createStore(rootReducer)
 

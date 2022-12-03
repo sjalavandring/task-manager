@@ -20,7 +20,7 @@ function Task (props: {projectId: number, currentTaskId: number, currentStatus: 
     return (
         <>
             {/* <div className={"" + (isWindowOpened.isNewSubtaskAdding ? "shadowBack" : "")} onClick={() => dispatch({type: "toggle_new_subtask_window_status"})}></div> */}
-            {isWindowOpened.isNewSubtaskAdding  ? <NewSubtaskForm projectId={props.projectId} currentStatus={props.currentStatus} currentTaskId={props.currentTaskId}/> : undefined}
+            {/* {isWindowOpened.isNewSubtaskAdding  ? <NewSubtaskForm projectId={props.projectId} currentStatus={props.currentStatus} currentTaskId={props.currentTaskId}/> : undefined} */}
             <div className="task task-container" key={task.id} onClick={() => console.log(props, props.currentStatus)}>
                 <div className="task-row">
                     <div className="task-row__item task-title"><b>{`${task.id}. ${task.title}`}</b></div>
@@ -32,7 +32,7 @@ function Task (props: {projectId: number, currentTaskId: number, currentStatus: 
                 </div>
                 <div className="task-row">
                     <div className="task-row__item">Создана: {task.dateOfCreate}</div>
-                    <div className="task-row__item task-interactive-button" onClick={() => dispatch({type: "toggle_new_subtask_window_status"})}>+ Подзадача</div>
+                    <div className="task-row__item task-interactive-button" onClick={() => {dispatch({type: "toggle_new_subtask_window_status"}); dispatch({type: "change_new_subtask_info", projectId: props.projectId, currentStatus: props.currentStatus, currentTaskId: props.currentTaskId})}}>+ Подзадача</div>
                     <div className="task-row__item task-interactive-button" onClick={() => setMoreInfoVisible(!isMoreInfoVisible)}>{isMoreInfoVisible ? "Скрыть": "Развернуть"}</div>
                 </div>
                 <div className={"" + (isMoreInfoVisible ? "" : "inactive")}>
