@@ -5,14 +5,14 @@ import type { ProjectsListType} from './../../store/store';
 import NewProjectForm from '../ModalWindows/NewProjectForm';
 
 type storeState = {
-    taskInfoReducer: ProjectsListType[],
+    projectsInfoReducer: ProjectsListType[],
 }
 
 function ProjectManager () {
     const dispatch = useDispatch()
-    let projectsList = useSelector((state: storeState) => state.taskInfoReducer)
+    let projectsList = useSelector((state: storeState) => state.projectsInfoReducer)
     let isWindowOpened = useSelector((state: any) => state.modalWindowsReducer)
-
+    console.log(projectsList)
     return (
         <div className="project-manager wrapper">
             <h1 className="project-manager-title">Менеджер проектов</h1>

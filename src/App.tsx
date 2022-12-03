@@ -8,14 +8,14 @@ import TaskManager from './Components/TaskManager/TaskManager';
 import { useSelector, useDispatch } from 'react-redux/es/exports';
 import type { ProjectsListType} from './store/store';
 
-type storeState = { 
-  taskInfoReducer: ProjectsListType[],
+type storeState = {
+    projectsInfoReducer: ProjectsListType[],
 }
 
 
 
 function App() {
-  const projectsList = useSelector((state: storeState) => state.taskInfoReducer)
+  const projectsList = useSelector((state: storeState) => state.projectsInfoReducer)
   return (
     <main>
       <DndProvider backend={HTML5Backend}>
@@ -23,6 +23,7 @@ function App() {
           <Routes>
             <Route path='/' element={<ProjectManager/>} />  
             {projectsList.map((project, projectId) => {
+              console.log(projectId)
                   return <Route path={`/project${projectId}`} element={<TaskManager projectId={projectId}/>} />
               })}
           </Routes>

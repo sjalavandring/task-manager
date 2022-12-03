@@ -24,7 +24,7 @@ function NewTaskForm (props: {projectId: number}) {
     }
 
     return (
-        <form className={"new-task-form " + (isWindowOpened.isNewTaskAdding ? "" : "inactive")} onClick={() => console.log(props)}>
+        <form className={"new-task-form " + (isWindowOpened.isNewTaskAdding ? "" : "inactive")}>
             <div className="new-task-form-block">
                 <input className="new-task-form__item" type="text" placeholder="Имя задачи (до 30 символов)" pattern="[A-Za-zА-Яа-яЁё\s]{1,30}" onChange={(element) => setTaskTitle((element.target.value).search(element.target.pattern) != -1 ? element.target.value : '')} required/>
                 <input className="new-task-form__item" type="text" placeholder="Приоритет (от 1 до 3, где 1 - наибольший приоритет)" pattern="[1-3]" onChange={(element) => setTaskPriority((element.target.value).search(element.target.pattern) != -1 ? element.target.value : '')} required/>
