@@ -34,12 +34,15 @@ function NewTaskForm (props: {projectId: number}) {
             <div className="new-task-form-block">
                 <textarea className="new-task-form__item new-task-form__textarea" maxLength={300}  placeholder="Описание задачи (до 300 символов)" onChange={(element) => setTaskDescription(element.target.value != '' ? element.target.value : "Описание не добавлено")}/>
             </div>
+            {/* <div className="new-task-form-block">
+                
+            </div> */}
             <div className="new-task-form-block">
-                <Uploady destination={{url: "https://webhook.site/86d21da5-ee78-4cbd-8e58-8f4ded5031ae"}}>
-                    <UploadButton>Upload File(s)</UploadButton>
-                </Uploady>
-            </div>
-            <div className="new-task-form-block">
+                <div className="new-task-form__item">
+                    <Uploady destination={{url: "http://localhost:3001/upload"}}>
+                        <UploadButton>Загрузить файл</UploadButton>
+                    </Uploady>
+                </div>
                 <button className='new-task-form__item submit_button' type="submit" onClick={() => {addNewTask()}}>Создать задачу</button>
             </div>  
         </form> 
