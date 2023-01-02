@@ -26,6 +26,6 @@ app.delete("/upload", (req, res) => {
     return res.status(200).json({ result: true, msg: 'file deleted' });
 });
 
-app.listen(3001, () => {
-    console.log(`Server running on port 3001`)
+app.listen(process.env.PORT || 3001, () => {
+    console.log(`Server running on port 3001 ${process.env.PORT}`)
 });

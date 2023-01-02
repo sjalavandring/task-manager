@@ -11,17 +11,26 @@ type storeState = {
     modalWindowsReducer: taskListType[],
 }
 
-
 function TaskManager (props: {projectId: number}) {
     const dispatch = useDispatch()
     const taskListInfo = useSelector((state: any) => state.taskInfoReducer[props.projectId].projectInfo)
     let isWindowOpened = useSelector((state: any) => state.modalWindowsReducer)
+
+    // let [test, setTest] = useState<string>()
+
+    // useEffect(() => {
+    //     fetch("/api")
+    //     .then(response => response.json())
+    //     .then(responce => setTest(responce))
+    // }, [])
+
     
     let taskList =  taskListInfo.map((column: any, columnId: number) => {
         return (
             <div className="tasks-column" key={columnId}>
                 <div className="tasks-list" >
                     <div className={"task-list-title " + `column-${column.status}` }>{column.status}</div>
+                    {/* <div>{test} alsdalsdasd</div> */}
                     <div className='task-box'>  
                         {column.tasks.map((task: any, taskId: number) => {
                             return (

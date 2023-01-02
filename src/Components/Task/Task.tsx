@@ -21,8 +21,6 @@ function Task (props: {projectId: number, currentTaskId: number, currentStatus: 
     function closeSubtasskform () {
         setSubtaskWindowVisible(false)
     }
-
-
     
     return (
         <>
@@ -37,7 +35,6 @@ function Task (props: {projectId: number, currentTaskId: number, currentStatus: 
                         })}
                     </div>
                 </div>
-                
                 <div className="task-row">
                     <div className="task-row__item">Создана: {task.dateOfCreate}</div>
                     <div className="task-row__item task-interactive-button" onClick={() => {dispatch({type: "toggle_new_subtask_window_status"}); setSubtaskWindowVisible(true)}}>+ Подзадача</div>
@@ -97,6 +94,5 @@ function Subtask (props: {projectId: number, currentTaskId: number, currentStatu
         </div>
     )
 }
-
 
 export default Task
