@@ -64,8 +64,6 @@ function Subtask (props: {projectId: number, currentTaskId: number, currentStatu
     let [isMoreInfoVisible, setMoreInfoVisible] = useState<boolean>(false)
     let subtask = taskListInfo[props.currentStatus].tasks[props.currentTaskId].subtasks[props.subtaskId]
 
-    console.log(100)
-
     return (
         <div className="subtask" key={subtask.id} onClick={() => console.log(props)}>
             <div className="task-row">

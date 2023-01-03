@@ -22,9 +22,8 @@ function App() {
         <BrowserRouter>
           <Routes>
             <Route path='/' element={<ProjectManager/>} />  
-            {projectsList.map((project, projectId) => {
-              console.log(projectId)
-                  return <Route path={`/project${projectId}`} element={<TaskManager projectId={projectId}/>} />
+              {projectsList.map((project, projectId) => {
+                return <Route path={`/project${projectId}`} element={<TaskManager projectId={projectId}/>} />
               })}
           </Routes>
         </BrowserRouter>

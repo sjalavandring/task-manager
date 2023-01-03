@@ -17,6 +17,7 @@ app.get('*', (req, res) => {
 app.post("/upload", (req, res) => {
     setTimeout(() => {
         console.log('file uploaded')
+        console.log(req)
         return res.status(200).json({ result: true, msg: 'file uploaded' });
     }, 3000);
 });
