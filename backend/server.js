@@ -10,15 +10,21 @@ app.get("/api", (req, res) => {
     })
 })
 
-app.get('*', (req, res) => {                       
-    res.sendFile(path.resolve(__dirname, '../public', 'index.html'));                               
+app.get('*', (req, res) => {
+    res.sendFile(path.resolve(__dirname, '../public', 'index.html'));
 });
 
 app.post("/upload", (req, res) => {
     setTimeout(() => {
         console.log('file uploaded')
-        console.log(req)
         return res.status(200).json({ result: true, msg: 'file uploaded' });
+    }, 3000);
+});
+
+app.post("/select", (req, res) => {
+    setTimeout(() => {
+        console.log('file selected')
+        return res.status(200).json({ result: true, msg: 'file selected' });
     }, 3000);
 });
 
@@ -28,5 +34,5 @@ app.delete("/upload", (req, res) => {
 });
 
 app.listen(process.env.PORT || 3001, () => {
-    console.log(`Server running on port 3001 ${process.env.PORT}`)
+    console.log(`Server running on port 3001`)
 });
