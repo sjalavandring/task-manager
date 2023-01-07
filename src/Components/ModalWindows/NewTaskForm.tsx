@@ -8,6 +8,10 @@ import { url } from 'inspector';
 
 function NewTaskForm (props: {projectId: number}) {
     const dispatch = useDispatch()
+    const taskListInfo = useSelector((state: any) => state.taskInfoReducer[props.projectId].projectInfo)
+    console.log(taskListInfo[0].tasks.length)
+    console.log(taskListInfo[1].tasks.length)
+    console.log(taskListInfo[2].tasks.length)
     let isWindowOpened = useSelector((state: any) => state.modalWindowsReducer)
     let [taskFile, setTaskFile] = useState()
     let [taskTitle, setTaskTitle] = useState('') 
@@ -16,12 +20,6 @@ function NewTaskForm (props: {projectId: number}) {
 
     function Uploader() {
         const item = useItemProgressListener((item) => {});
-
-        useEffect (() => {
-            if (item.id) {
-                console.log(item.id)
-            }
-        }, [item])
 
         return (
             <div className="new-task-form__item new-task-form__upload">
@@ -33,10 +31,6 @@ function NewTaskForm (props: {projectId: number}) {
         )
     }
 
-    // useEffect(() => {
-    //     console.log(progressData)
-    // }, [progressData])
-
     function addNewTask() {
         if (taskTitle != "" && taskPriority != "") {
             if (taskDescription != "") {
@@ -45,9 +39,9 @@ function NewTaskForm (props: {projectId: number}) {
             if (taskDescription == "") {
                 dispatch({type: "add_task", project: props.projectId, title: taskTitle, priority: parseInt(taskPriority)})
             }
-            if (taskFile != undefined) {
-                alert("File selected and uploaded")
-            }
+            // if (taskFile != undefined) {
+            //     alert("File selected and uploaded")
+            // }
             dispatch({type: "toggle_new_task_window_status"})
         } else {
             alert("Неверно введены данные")
@@ -56,7 +50,7 @@ function NewTaskForm (props: {projectId: number}) {
 
     return (
         <form className={"new-task-form " + (isWindowOpened.isNewTaskAdding ? "" : "inactive")}>
-            <Uploady destination={{url: "http://localhost:3001/select"}}>
+            <Uploady destination={{url: "http://localhost:3001/select", params: {name: `Project${props.projectId}Task${taskListInfo[0].tasks.length + taskListInfo[0].tasks.length + taskListInfo[0].tasks.length + 1}`}}}>
                 <div className="new-task-form-block">
                     <input className="new-task-form__item" type="text" placeholder="Имя задачи (до 30 символов)" pattern="[A-Za-zА-Яа-яЁё\s]{1,30}" onChange={(element) => setTaskTitle((element.target.value).search(element.target.pattern) != -1 ? element.target.value : '')} required/>
                     <input className="new-task-form__item" type="text" placeholder="Приоритет (от 1 до 3, где 1 - наибольший приоритет)" pattern="[1-3]" onChange={(element) => setTaskPriority((element.target.value).search(element.target.pattern) != -1 ? element.target.value : '')} required/>

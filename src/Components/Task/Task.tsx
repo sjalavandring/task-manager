@@ -18,6 +18,8 @@ function Task (props: {projectId: number, currentTaskId: number, currentStatus: 
 
     let [subtaskWindowVisible, setSubtaskWindowVisible] = useState(false)
 
+    // let taskImage = await fetch ('http://localhost:3001/api')
+
     function closeSubtasskform () {
         setSubtaskWindowVisible(false)
     }
@@ -42,6 +44,9 @@ function Task (props: {projectId: number, currentTaskId: number, currentStatus: 
                 </div>
                 <div className={"" + (isMoreInfoVisible ? "" : "inactive")}>
                     <div className="task-row task-more-information">
+                        <div className="task-row__item">{task.description ? task.description : "Описание не задано"}</div>
+                    </div>
+                    <div className="task-row">
                         <div className="task-row__item">{task.description ? task.description : "Описание не задано"}</div>
                     </div>
                     <div className="task-row">
