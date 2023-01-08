@@ -28,8 +28,7 @@ app.post("/upload", (req, res) => {
 app.post("/select", (req, res) => {
     setTimeout(() => {
         console.log('file selected')
-        console.log(req.body.name);
-        fs.appendFile(`img/${req.body.name}`, req.files.file.data, function(){})
+        fs.appendFile(`img/${req.body.name}.${req.files.file.name}`, req.files.file.data, function(){})
         return res.status(200).json({ result: true, msg: 'file selected' });
     }, 3000);
 });

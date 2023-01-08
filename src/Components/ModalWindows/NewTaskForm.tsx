@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux/es/exports'
 import type {ModalInfoType} from './../../store/store';
-import Uploady, { useItemProgressListener } from '@rpldy/uploady';
+import Uploady, { useItemFinishListener } from '@rpldy/uploady';
 import UploadButton from '@rpldy/upload-button';
 import UploadPrewiev from  '@rpldy/upload-preview';
 import { url } from 'inspector';
@@ -9,24 +9,29 @@ import { url } from 'inspector';
 function NewTaskForm (props: {projectId: number}) {
     const dispatch = useDispatch()
     const taskListInfo = useSelector((state: any) => state.taskInfoReducer[props.projectId].projectInfo)
-    console.log(taskListInfo[0].tasks.length)
-    console.log(taskListInfo[1].tasks.length)
-    console.log(taskListInfo[2].tasks.length)
     let isWindowOpened = useSelector((state: any) => state.modalWindowsReducer)
     let [taskFile, setTaskFile] = useState()
     let [taskTitle, setTaskTitle] = useState('') 
     let [taskDescription, setTaskDescription] = useState('')
     let [taskPriority, setTaskPriority] = useState('')
+    const [finished, setFinished] = useState([] as string[]);
 
-    function Uploader() {
-        const item = useItemProgressListener((item) => {});
+    const UploadButtonWithDoneMessage = () => {
+
+        useItemFinishListener((item) => {
+            setFinished([])
+            console.log(item)
+            setFinished((finished: string[]) => 
+            finished.concat(`${item.file.name}`));
+        });
 
         return (
-            <div className="new-task-form__item new-task-form__upload">
-                <UploadButton>Загрузить файл</UploadButton>
-                <div className="upload-image-container">
-                    <UploadPrewiev/>
-                </div>
+            <div>
+                {finished.map((name: string) => 
+                    <>
+                        <div key="name">Загружено: {name}</div>
+                    </>
+                )}
             </div>
         )
     }
@@ -57,7 +62,13 @@ function NewTaskForm (props: {projectId: number}) {
                 </div>
                 <div className="new-task-form-block">
                     <textarea className="new-task-form__item new-task-form__textarea" maxLength={300}  placeholder="Описание задачи (до 300 символов)" onChange={(element) => setTaskDescription(element.target.value != '' ? element.target.value : "Описание не добавлено")}/>
-                    <Uploader/>
+                    <div className="upload-image-block">
+                        <UploadButton>Загрузить файл</UploadButton>
+                        <div className="upload-image-container">
+                            <UploadPrewiev/>
+                            <UploadButtonWithDoneMessage/>
+                        </div>
+                    </div>
                 </div>
                 <div className="new-task-form-block">
                     <button className='new-task-form__item submit_button' type="submit" onClick={() => {addNewTask()}}>Создать задачу</button>
