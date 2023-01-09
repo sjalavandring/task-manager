@@ -1,10 +1,15 @@
 import React, { useEffect, useState } from 'react'
+import uploadedFile from '../../img/uploadedFile.png'
 import { useSelector, useDispatch } from 'react-redux/es/exports'
 import type {ModalInfoType} from './../../store/store';
 import Uploady, { useItemFinishListener } from '@rpldy/uploady';
 import UploadButton from '@rpldy/upload-button';
 import UploadPrewiev from  '@rpldy/upload-preview';
-import { url } from 'inspector';
+
+type UploadedFileType = {
+    name: string,
+    type: string,
+}
 
 function NewTaskForm (props: {projectId: number}) {
     const dispatch = useDispatch()
@@ -14,25 +19,25 @@ function NewTaskForm (props: {projectId: number}) {
     let [taskTitle, setTaskTitle] = useState('') 
     let [taskDescription, setTaskDescription] = useState('')
     let [taskPriority, setTaskPriority] = useState('')
-    const [finished, setFinished] = useState([] as string[]);
+    const [finished, setFinished] = useState([] as UploadedFileType[]);
 
     const UploadButtonWithDoneMessage = () => {
 
         useItemFinishListener((item) => {
-            setFinished([])
-            console.log(item)
-            setFinished((finished: string[]) => 
-            finished.concat(`${item.file.name}`));
+            setFinished([] as UploadedFileType[])
+            setFinished((finished: UploadedFileType[]) => 
+            finished.concat({name: `${item.file.name}`, type: `${(item.file.type)}`}));
         });
 
         return (
-            <div>
-                {finished.map((name: string) => 
+            <>
+                {finished.map((item: UploadedFileType) => 
                     <>
-                        <div key="name">Загружено: {name}</div>
+                        {finished[0].type.slice(0, 5) != 'image' ? <img src={uploadedFile} alt="uploadFule" /> : undefined}
+                        <div key="name" className="upload-imaga__name">Загружено: {item.name}</div>
                     </>
                 )}
-            </div>
+            </>
         )
     }
 
@@ -44,9 +49,6 @@ function NewTaskForm (props: {projectId: number}) {
             if (taskDescription == "") {
                 dispatch({type: "add_task", project: props.projectId, title: taskTitle, priority: parseInt(taskPriority)})
             }
-            // if (taskFile != undefined) {
-            //     alert("File selected and uploaded")
-            // }
             dispatch({type: "toggle_new_task_window_status"})
         } else {
             alert("Неверно введены данные")
@@ -62,10 +64,10 @@ function NewTaskForm (props: {projectId: number}) {
                 </div>
                 <div className="new-task-form-block">
                     <textarea className="new-task-form__item new-task-form__textarea" maxLength={300}  placeholder="Описание задачи (до 300 символов)" onChange={(element) => setTaskDescription(element.target.value != '' ? element.target.value : "Описание не добавлено")}/>
-                    <div className="upload-image-block">
+                    <div className="new-task-form__item upload-image-block">
                         <UploadButton>Загрузить файл</UploadButton>
                         <div className="upload-image-container">
-                            <UploadPrewiev/>
+                            <UploadPrewiev loadFirstOnly={true}/>
                             <UploadButtonWithDoneMessage/>
                         </div>
                     </div>

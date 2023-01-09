@@ -100,13 +100,19 @@
 .upload-image-block {
     text-align: center;
     max-width: 200px;
-    height: 150px; 
+    height: 150px;
 }
 
 .upload-image-container > img {
     display: block;
-    max-height: 110px;
+    max-height: 85px;
     max-width: 200px;
     margin: 5px auto;
+}
+
+.upload-imaga__name {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 

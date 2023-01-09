@@ -17,6 +17,7 @@ type taskListType = {
         timeInDev?: string,
         description: string,
         priority: number,
+        files?: string[],
         comments?: CommentType,
         subtasks: {
             id: number,
@@ -52,6 +53,7 @@ let taskListInfo: ProjectsListType[] = [
                     type: "task",
                     description: "test description, test description, test description test description, test description, test description test description, test description, test description test description, test description, test description",
                     priority: 3,
+                    files: [],
                     subtasks: [{
                         id: 1,
                         type: "subtask",

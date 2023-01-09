@@ -26,11 +26,13 @@ app.post("/upload", (req, res) => {
 });
 
 app.post("/select", (req, res) => {
-    setTimeout(() => {
-        console.log('file selected')
-        fs.appendFile(`img/${req.body.name}.${req.files.file.name}`, req.files.file.data, function(){})
+         console.log('file selected')
+        fs.unlink(`img/${req.body.name}${req.files.file.name.slice(req.files.file.name.lastIndexOf('.'))}`, (err) => {
+            if (err) throw err;
+            console.log('Deleted');
+        });
+        fs.appendFile(`img/${req.body.name}${req.files.file.name.slice(req.files.file.name.lastIndexOf('.'))}`, req.files.file.data, function(){})
         return res.status(200).json({ result: true, msg: 'file selected' });
-    }, 3000);
 });
 
 app.delete("/upload", (req, res) => {
