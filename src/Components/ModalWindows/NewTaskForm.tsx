@@ -5,10 +5,12 @@ import type {ModalInfoType} from './../../store/store';
 import Uploady, { useItemFinishListener } from '@rpldy/uploady';
 import UploadButton from '@rpldy/upload-button';
 import UploadPrewiev from  '@rpldy/upload-preview';
+import { finished } from 'stream';
 
 type UploadedFileType = {
     name: string,
     type: string,
+    data: any,
 }
 
 function NewTaskForm (props: {projectId: number}) {
@@ -19,26 +21,48 @@ function NewTaskForm (props: {projectId: number}) {
     let [taskTitle, setTaskTitle] = useState('') 
     let [taskDescription, setTaskDescription] = useState('')
     let [taskPriority, setTaskPriority] = useState('')
-    const [finished, setFinished] = useState([] as UploadedFileType[]);
+    const [uploadFinished, setUploadFinished] = useState([] as UploadedFileType[]);
 
     const UploadButtonWithDoneMessage = () => {
+        let reader = new FileReader();
 
         useItemFinishListener((item) => {
-            setFinished([] as UploadedFileType[])
-            setFinished((finished: UploadedFileType[]) => 
-            finished.concat({name: `${item.file.name}`, type: `${(item.file.type)}`}));
+            setUploadFinished([] as UploadedFileType[])
+            setUploadFinished((finished: UploadedFileType[]) =>  {
+                return finished.concat({name: `${item.file.name}`, type: `${(item.file.type)}`,  data: item.file});
+            })
         });
 
-        return (
-            <>
-                {finished.map((item: UploadedFileType) => 
+        if (uploadFinished[0] ) {
+            if (uploadFinished[0].type.slice(0, 5) == 'image') {
+                console.log('image')
+                return (
                     <>
-                        {finished[0].type.slice(0, 5) != 'image' ? <img src={uploadedFile} alt="uploadFule" /> : undefined}
-                        <div key="name" className="upload-imaga__name">Загружено: {item.name}</div>
+                        <img src={URL.createObjectURL(uploadFinished[0].data)} alt="uploadFile" />
+                        <div key="name" className="upload-imaga__name">Загружено: {uploadFinished[0].name}</div>
                     </>
-                )}
-            </>
-        )
+                )
+            } else 
+            if (uploadFinished[0].type.slice(0, 5) == 'video') {
+                console.log('video')
+                return (
+                    <>
+                        <video controls src={URL.createObjectURL(uploadFinished[0].data)}></video> 
+                        <div key="name" className="upload-imaga__name">Загружено: {uploadFinished[0].name}</div>
+                    </>
+                )
+            } else 
+            if (uploadFinished[0].type.slice(0, 5) != ('image' || 'video')) {
+                return (
+                    <>
+                        <img src={uploadedFile} alt="uploadFile" />
+                        <div key="name" className="upload-imaga__name">Загружено: {uploadFinished[0].name}</div>
+                    </>
+                )
+            }
+        }
+
+        return <></>
     }
 
     function addNewTask() {
@@ -67,8 +91,9 @@ function NewTaskForm (props: {projectId: number}) {
                     <div className="new-task-form__item upload-image-block">
                         <UploadButton>Загрузить файл</UploadButton>
                         <div className="upload-image-container">
-                            <UploadPrewiev loadFirstOnly={true}/>
-                            <UploadButtonWithDoneMessage/>
+                            {/* {uploadFinished[0] && (uploadFinished[0].type.slice(0, 5) != ('image' || 'video')) ? <UploadButtonWithDoneMessage/> : <UploadPrewiev loadFirstOnly={true} videoMimeTypes={undefined}/>} */}
+                            <UploadPrewiev loadFirstOnly={true} videoMimeTypes={undefined} PreviewComponent={UploadButtonWithDoneMessage}/>
+                            {/* <UploadButtonWithDoneMessage/> */}
                         </div>
                     </div>
                 </div>

@@ -26,11 +26,16 @@ app.post("/upload", (req, res) => {
 });
 
 app.post("/select", (req, res) => {
-         console.log('file selected')
+        console.log('file selected')
+
+        console.log(req.files.file)
+
+        if (fs.existsSync(`img/${req.body.name}${req.files.file.name.slice(req.files.file.name.lastIndexOf('.'))}`))
         fs.unlink(`img/${req.body.name}${req.files.file.name.slice(req.files.file.name.lastIndexOf('.'))}`, (err) => {
             if (err) throw err;
             console.log('Deleted');
         });
+        
         fs.appendFile(`img/${req.body.name}${req.files.file.name.slice(req.files.file.name.lastIndexOf('.'))}`, req.files.file.data, function(){})
         return res.status(200).json({ result: true, msg: 'file selected' });
 });
