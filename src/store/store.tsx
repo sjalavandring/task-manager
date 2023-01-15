@@ -95,6 +95,7 @@ let taskInfoReducer = (state = taskListInfo, action: any) => {
                 dateOfCreate: (new Date()).toISOString().slice(0,10),
                 description: action.description,
                 priority: action.priority,
+                
                 subtasks: []
             })
             newState[action.project].projectInfo[0].tasks = structuredClone(newProjectsTasks)
@@ -112,19 +113,21 @@ let taskInfoReducer = (state = taskListInfo, action: any) => {
             newState[action.project].projectInfo[action.taskStatus].tasks[action.taskId].subtasks = structuredClone(newSubtasks)
             console.log(newState)
             return newState
-        case 'add_new_project':
-            let newProjectsList = structuredClone(state)
-            newProjectsList.push({
-                id: newProjectsList.length + 1, 
-                title: action.projectTitle,
-                projectInfo: [
-                    {id: 1, status: "Queue", tasks: []},
-                    {id: 2, status: "Development", tasks: []},
-                    {id: 3, status: "Done", tasks: []},
-                ]
-            }) 
-            console.log(newProjectsList)
-            return newProjectsList
+        case 'add_new_task_files':
+            newProjectsTasks = structuredClone(state[action.project].projectInfo[0].tasks)
+            newProjectsTasks[newProjectsTasks.length] = {...newProjectsTasks[newProjectsTasks.length], files: action.files}
+            newProjectsTasks.push({
+                id: state[action.project].projectInfo[0].tasks.length + 1, 
+                type: "task",
+                title: action.title, 
+                dateOfCreate: (new Date()).toISOString().slice(0,10),
+                description: action.description,
+                priority: action.priority,
+                subtasks: []
+            })
+            newState[action.project].projectInfo[0].tasks = structuredClone(newProjectsTasks)
+            console.log(newState)
+            return newState
         default: 
             return state
     }

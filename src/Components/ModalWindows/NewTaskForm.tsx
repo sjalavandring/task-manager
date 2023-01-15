@@ -11,6 +11,7 @@ type UploadedFileType = {
     name: string,
     type: string,
     data: any,
+    id: number,
 }
 
 function NewTaskForm (props: {projectId: number}) {
@@ -24,18 +25,16 @@ function NewTaskForm (props: {projectId: number}) {
     const [uploadFinished, setUploadFinished] = useState([] as UploadedFileType[]);
 
     const UploadButtonWithDoneMessage = () => {
-        let reader = new FileReader();
 
         useItemFinishListener((item) => {
             setUploadFinished([] as UploadedFileType[])
             setUploadFinished((finished: UploadedFileType[]) =>  {
-                return finished.concat({name: `${item.file.name}`, type: `${(item.file.type)}`,  data: item.file});
+                return finished.concat({name: `${item.file.name}`, type: `${(item.file.type)}`,  data: item.file, id: finished.length});
             })
         });
 
         if (uploadFinished[0] ) {
             if (uploadFinished[0].type.slice(0, 5) == 'image') {
-                console.log('image')
                 return (
                     <>
                         <img src={URL.createObjectURL(uploadFinished[0].data)} alt="uploadFile" />
@@ -44,7 +43,6 @@ function NewTaskForm (props: {projectId: number}) {
                 )
             } else 
             if (uploadFinished[0].type.slice(0, 5) == 'video') {
-                console.log('video')
                 return (
                     <>
                         <video controls src={URL.createObjectURL(uploadFinished[0].data)}></video> 
@@ -81,7 +79,7 @@ function NewTaskForm (props: {projectId: number}) {
 
     return (
         <form className={"new-task-form " + (isWindowOpened.isNewTaskAdding ? "" : "inactive")}>
-            <Uploady destination={{url: "http://localhost:3001/select", params: {name: `Project${props.projectId}Task${taskListInfo[0].tasks.length + taskListInfo[0].tasks.length + taskListInfo[0].tasks.length + 1}`}}}>
+            <Uploady destination={{url: "http://localhost:3001/select", params: {name: `Project${props.projectId}Task${taskListInfo[0].tasks.length + taskListInfo[1].tasks.length + taskListInfo[2].tasks.length + 1}File${uploadFinished.length}`}}}>
                 <div className="new-task-form-block">
                     <input className="new-task-form__item" type="text" placeholder="Имя задачи (до 30 символов)" pattern="[A-Za-zА-Яа-яЁё\s]{1,30}" onChange={(element) => setTaskTitle((element.target.value).search(element.target.pattern) != -1 ? element.target.value : '')} required/>
                     <input className="new-task-form__item" type="text" placeholder="Приоритет (от 1 до 3, где 1 - наибольший приоритет)" pattern="[1-3]" onChange={(element) => setTaskPriority((element.target.value).search(element.target.pattern) != -1 ? element.target.value : '')} required/>
@@ -91,9 +89,7 @@ function NewTaskForm (props: {projectId: number}) {
                     <div className="new-task-form__item upload-image-block">
                         <UploadButton>Загрузить файл</UploadButton>
                         <div className="upload-image-container">
-                            {/* {uploadFinished[0] && (uploadFinished[0].type.slice(0, 5) != ('image' || 'video')) ? <UploadButtonWithDoneMessage/> : <UploadPrewiev loadFirstOnly={true} videoMimeTypes={undefined}/>} */}
                             <UploadPrewiev loadFirstOnly={true} videoMimeTypes={undefined} PreviewComponent={UploadButtonWithDoneMessage}/>
-                            {/* <UploadButtonWithDoneMessage/> */}
                         </div>
                     </div>
                 </div>
