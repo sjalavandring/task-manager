@@ -24,12 +24,16 @@ function NewTaskForm (props: {projectId: number}) {
     let [taskPriority, setTaskPriority] = useState('')
     const [uploadFinished, setUploadFinished] = useState([] as UploadedFileType[]);
 
-    const UploadButtonWithDoneMessage = () => {
+    useEffect(() => {
+        console.log(uploadFinished)
+    }, [uploadFinished])
 
+    const UploadButtonWithDoneMessage = () => {
+        console.log(1)
         useItemFinishListener((item) => {
             setUploadFinished([] as UploadedFileType[])
             setUploadFinished((finished: UploadedFileType[]) =>  {
-                return finished.concat({name: `${item.file.name}`, type: `${(item.file.type)}`,  data: item.file, id: finished.length});
+                return finished.concat({name: `Project${props.projectId}Task${taskListInfo[0].tasks.length + taskListInfo[1].tasks.length + taskListInfo[2].tasks.length + 1}`, type: `${(item.file.type)}`,  data: item.file, id: finished.length});
             })
         });
 
@@ -71,6 +75,9 @@ function NewTaskForm (props: {projectId: number}) {
             if (taskDescription == "") {
                 dispatch({type: "add_task", project: props.projectId, title: taskTitle, priority: parseInt(taskPriority)})
             }
+            if (uploadFinished.length > 0) {
+                dispatch({type: "add_new_task_files", files: uploadFinished})
+            }
             dispatch({type: "toggle_new_task_window_status"})
         } else {
             alert("Неверно введены данные")
@@ -79,7 +86,7 @@ function NewTaskForm (props: {projectId: number}) {
 
     return (
         <form className={"new-task-form " + (isWindowOpened.isNewTaskAdding ? "" : "inactive")}>
-            <Uploady destination={{url: "http://localhost:3001/select", params: {name: `Project${props.projectId}Task${taskListInfo[0].tasks.length + taskListInfo[1].tasks.length + taskListInfo[2].tasks.length + 1}File${uploadFinished.length}`}}}>
+            <Uploady destination={{url: "http://localhost:3001/select", params: {name: `Project${props.projectId}Task${taskListInfo[0].tasks.length + taskListInfo[1].tasks.length + taskListInfo[2].tasks.length + 1}`}}}>
                 <div className="new-task-form-block">
                     <input className="new-task-form__item" type="text" placeholder="Имя задачи (до 30 символов)" pattern="[A-Za-zА-Яа-яЁё\s]{1,30}" onChange={(element) => setTaskTitle((element.target.value).search(element.target.pattern) != -1 ? element.target.value : '')} required/>
                     <input className="new-task-form__item" type="text" placeholder="Приоритет (от 1 до 3, где 1 - наибольший приоритет)" pattern="[1-3]" onChange={(element) => setTaskPriority((element.target.value).search(element.target.pattern) != -1 ? element.target.value : '')} required/>

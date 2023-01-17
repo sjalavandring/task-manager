@@ -26,9 +26,9 @@ app.post("/upload", (req, res) => {
 });
 
 app.post("/select", (req, res) => {
-        console.log('file selected')
-
-        console.log(req.body.name)
+        // console.log('file selected')
+        let fileIndex = 1;
+        // console.log(req.body.name)
 
         // if (fs.existsSync(`img/${req.body.name}${req.files.file.name}`)) {
         //     fs.rmdir(`img/${req.body.name}${req.files.file.name}`, err => {
@@ -42,13 +42,18 @@ app.post("/select", (req, res) => {
         //     console.log('Folder created');
         // });
 
-        if (fs.existsSync(`img/${req.body.name}${req.files.file.name.slice(req.files.file.name.lastIndexOf('.'))}`))
-        fs.unlink(`img/${req.body.name}${req.files.file.name.slice(req.files.file.name.lastIndexOf('.'))}`, (err) => {
-            if (err) throw err;
-            console.log('Deleted');
-        });
+        function fileRecorder () {
+            if (fs.existsSync(`img/${req.body.name}File${fileIndex}${req.files.file.name.slice(req.files.file.name.lastIndexOf('.'))}`)) {
+                fileIndex++
+                fileRecorder ()
+            } else {
+                fs.appendFile(`img/${req.body.name}File${fileIndex}${req.files.file.name.slice(req.files.file.name.lastIndexOf('.'))}`, req.files.file.data, function(){})
+            }
+        }
 
-        fs.appendFile(`img/${req.body.name}${req.files.file.name.slice(req.files.file.name.lastIndexOf('.'))}`, req.files.file.data, function(){})
+        fileRecorder ();
+
+        // fs.appendFile(`img/${req.body.name}File${fileIndex}${req.files.file.name.slice(req.files.file.name.lastIndexOf('.'))}`, req.files.file.data, function(){})
         return res.status(200).json({ result: true, msg: 'file selected' });
 });
 
