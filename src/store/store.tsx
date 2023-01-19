@@ -99,6 +99,7 @@ let taskInfoReducer = (state = taskListInfo, action: any) => {
                 subtasks: []
             })
             newState[action.project].projectInfo[0].tasks = structuredClone(newProjectsTasks)
+            console.log(newState)
             return newState
         case "add_subtask": 
             let newSubtasks = structuredClone(state[action.project].projectInfo[action.taskStatus].tasks[action.taskId].subtasks);
@@ -142,6 +143,7 @@ let modalWindowsReducer = (state = modalWindowsStatus, action: any) => {
 let projectsInfoReducer = (state = taskListInfo, action: any) => {
     switch (action.type) {
         case 'add_new_project':
+            console.log(1)
             let newProjectsList = structuredClone(state)
             newProjectsList.push({
                 id: newProjectsList.length + 1, 
@@ -155,7 +157,7 @@ let projectsInfoReducer = (state = taskListInfo, action: any) => {
             console.log(newProjectsList)
             return newProjectsList
         default: 
-                return state
+            return state
     }
 }
 

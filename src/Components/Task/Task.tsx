@@ -11,19 +11,17 @@ type storeState = {
 
 function Task (props: {projectId: number, currentTaskId: number, currentStatus: number}) {
     const dispatch = useDispatch()
-    const taskListInfo = useSelector((state: any) => state.taskInfoReducer[props.projectId].projectInfo)
+    const taskListInfo = useSelector((state: any) => state.projectsInfoReducer[props.projectId].projectInfo)
     let isWindowOpened = useSelector((state: any) => state.modalWindowsReducer)
     let [task, setTask] = useState(structuredClone(taskListInfo[props.currentStatus].tasks[props.currentTaskId]))
     let [isMoreInfoVisible, setMoreInfoVisible] = useState<boolean>(false)
 
     let [subtaskWindowVisible, setSubtaskWindowVisible] = useState(false)
 
-    // let taskImage = await fetch ('http://localhost:3001/api')
-
     function closeSubtasskform () {
         setSubtaskWindowVisible(false)
     }
-    
+
     return (
         <>
             <div className={isWindowOpened.isNewSubtaskAdding && subtaskWindowVisible ? "shadowBack " : ""} onClick={() => {dispatch({type: "toggle_new_subtask_window_status"}); setSubtaskWindowVisible(false)}}></div>
@@ -58,7 +56,7 @@ function Task (props: {projectId: number, currentTaskId: number, currentStatus: 
             {taskListInfo[props.currentStatus].tasks[props.currentTaskId].subtasks != undefined ? taskListInfo[props.currentStatus].tasks[props.currentTaskId].subtasks.map((subtask: any, subtaskId: number) => {
                 return (
                     <Subtask projectId={props.projectId} currentStatus={props.currentStatus} currentTaskId={props.currentTaskId} subtaskId={subtaskId} key={subtaskId}/>
-                )                                  
+                )
             }) : ""}
         </>
     )
