@@ -17,7 +17,7 @@ type taskListType = {
         timeInDev?: string,
         description: string,
         priority: number,
-        files?: string[],
+        files?: string[] | [],
         comments?: CommentType,
         subtasks: {
             id: number,
@@ -29,7 +29,7 @@ type taskListType = {
             description: string,
             priority: number,
         }[] | [],
-    }[]
+    }[] | [],
 }
 type ProjectsListType = {
     id: number,
@@ -114,12 +114,27 @@ let taskInfoReducer = (state = taskListInfo, action: any) => {
             newState[action.project].projectInfo[action.taskStatus].tasks[action.taskId].subtasks = structuredClone(newSubtasks)
             console.log(newState)
             return newState
+            
         case 'add_new_task_files':
-            newProjectsTasks = structuredClone(state[action.project].projectInfo[0].tasks)
-            newProjectsTasks[newProjectsTasks.length] = {...newProjectsTasks[newProjectsTasks.length], files: action.files}
-            newState[action.project].projectInfo[0].tasks = structuredClone(newProjectsTasks)
-            console.log(newState)
-            return newState
+            // newProjectsTasks = structuredClone(state[action.project].projectInfo[0].tasks)
+            // newProjectsTasks[newProjectsTasks.length] = {...newProjectsTasks[newProjectsTasks.length], files: action.files}
+            // newState[action.project].projectInfo[0].tasks = structuredClone(newProjectsTasks)
+            console.log(action.files)
+            return state
+            // return newState
+        case 'add_new_project':
+            let newProjectsList = structuredClone(state)
+            newProjectsList.push({
+                id: newProjectsList.length + 1, 
+                title: action.projectTitle,
+                projectInfo: [
+                    {id: 1, status: "Queue", tasks: []},
+                    {id: 2, status: "Development", tasks: []},
+                    {id: 3, status: "Done", tasks: []},
+                ]
+            }) 
+            console.log(newProjectsList)
+            return newProjectsList
         default: 
             return state
     }

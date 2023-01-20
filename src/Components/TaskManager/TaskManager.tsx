@@ -13,7 +13,7 @@ type storeState = {
 
 function TaskManager (props: {projectId: number}) {
     const dispatch = useDispatch()
-    let taskListInfo = useSelector((state: any) => state.projectsInfoReducer[props.projectId].projectInfo)
+    let taskListInfo = useSelector((state: any) => state.taskInfoReducer[props.projectId].projectInfo)
     let isWindowOpened = useSelector((state: any) => state.modalWindowsReducer)
 
     let taskList =  taskListInfo.map((column: any, columnId: number) => {

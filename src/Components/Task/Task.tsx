@@ -11,7 +11,7 @@ type storeState = {
 
 function Task (props: {projectId: number, currentTaskId: number, currentStatus: number}) {
     const dispatch = useDispatch()
-    const taskListInfo = useSelector((state: any) => state.projectsInfoReducer[props.projectId].projectInfo)
+    const taskListInfo = useSelector((state: any) => state.taskInfoReducer[props.projectId].projectInfo)
     let isWindowOpened = useSelector((state: any) => state.modalWindowsReducer)
     let [task, setTask] = useState(structuredClone(taskListInfo[props.currentStatus].tasks[props.currentTaskId]))
     let [isMoreInfoVisible, setMoreInfoVisible] = useState<boolean>(false)

@@ -24,19 +24,35 @@ function NewTaskForm (props: {projectId: number}) {
 
     const UploadButtonWithDoneMessage = () => {
         useItemFinishListener((item) => {
-            setUploadFinished([] as UploadedFileType[])
             setUploadFinished((finished: UploadedFileType[]) =>  {
+                console.log(isWindowOpened)
                 return finished.concat({name: `Project${props.projectId}Task${taskListInfo[0].tasks.length + taskListInfo[1].tasks.length + taskListInfo[2].tasks.length + 1}File(s)`, type: `${(item.file.type)}`,  data: item.file, id: finished.length});
             })
         });
 
         if (uploadFinished[0]) {
             if (uploadFinished[0].type.slice(0, 5) == 'image') {
-                return (
-                    <>
-                        <div key="name" className="upload-imaga__name">Загружено: {uploadFinished[0].name}</div>
-                    </>
-                )
+                if (uploadFinished[0].type.slice(0, 5) == 'image') {
+                    return (
+                        <>
+                            <div key="name" className="upload-imaga__name">Загружено: {uploadFinished[0].name}</div>
+                        </>
+                    )
+                } else 
+                if (uploadFinished[0].type.slice(0, 5) == 'video') {
+                    return (
+                        <>
+                            <div key="name" className="upload-imaga__name">Загружено: {uploadFinished[0].name}</div>
+                        </>
+                    )
+                } else 
+                if (uploadFinished[0].type.slice(0, 5) != ('image' || 'video')) {
+                    return (
+                        <>
+                            <div key="name" className="upload-imaga__name">Загружено: {uploadFinished[0].name}</div>
+                        </>
+                    )
+                }
             }
         }
         return <></>
@@ -50,9 +66,10 @@ function NewTaskForm (props: {projectId: number}) {
             if (taskDescription == "") {
                 dispatch({type: "add_task", project: props.projectId, title: taskTitle, priority: parseInt(taskPriority)})
             }
-            // if (uploadFinished.length > 0) {
-            //     dispatch({type: "add_new_task_files", files: uploadFinished})
-            // }
+            if (uploadFinished.length > 0) {
+                console.log(uploadFinished)
+                dispatch({type: "add_new_task_files", files: uploadFinished})
+            }
             dispatch({type: "toggle_new_task_window_status"})
         } else {
             alert("Неверно введены данные")
@@ -60,7 +77,7 @@ function NewTaskForm (props: {projectId: number}) {
     }
 
     return (
-        <form className={"new-task-form " + (isWindowOpened.isNewTaskAdding ? "" : "inactive")}>
+        <form className={"new-task-form " + (isWindowOpened.isNewTaskAdding ? "" : "inactive")} onSubmit={() => console.log(1)}>
             <Uploady destination={{url: "http://localhost:3001/select", params: {name: `Project${props.projectId}Task${taskListInfo[0].tasks.length + taskListInfo[1].tasks.length + taskListInfo[2].tasks.length + 1}`}}}>
                 <div className="new-task-form-block">
                     <input className="new-task-form__item" type="text" placeholder="Имя задачи (до 30 символов)" pattern="[A-Za-zА-Яа-яЁё\s]{1,30}" onChange={(element) => setTaskTitle((element.target.value).search(element.target.pattern) != -1 ? element.target.value : '')} required/>
@@ -69,10 +86,10 @@ function NewTaskForm (props: {projectId: number}) {
                 <div className="new-task-form-block">
                     <textarea className="new-task-form__item new-task-form__textarea" maxLength={300}  placeholder="Описание задачи (до 300 символов)" onChange={(element) => setTaskDescription(element.target.value != '' ? element.target.value : "Описание не добавлено")}/>
                     <div className="new-task-form__item upload-image-block">
-                        <UploadButton>Загрузить файл</UploadButton>
+                        <UploadButton onClick={() => setUploadFinished([] as UploadedFileType[])}>Загрузить файл</UploadButton>
                         <div className="upload-image-container">
                             <UploadPrewiev loadFirstOnly={true} videoMimeTypes={undefined}/>
-                            <UploadPrewiev PreviewComponent={UploadButtonWithDoneMessage}/>
+                            <UploadPrewiev loadFirstOnly={true} PreviewComponent={UploadButtonWithDoneMessage}/>
                         </div>
                     </div>
                 </div>
