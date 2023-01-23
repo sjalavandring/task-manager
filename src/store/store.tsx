@@ -99,7 +99,6 @@ let taskInfoReducer = (state = taskListInfo, action: any) => {
                 subtasks: []
             })
             newState[action.project].projectInfo[0].tasks = structuredClone(newProjectsTasks)
-            console.log(newState)
             return newState
         case "add_subtask": 
             let newSubtasks = structuredClone(state[action.project].projectInfo[action.taskStatus].tasks[action.taskId].subtasks);

@@ -18,17 +18,16 @@ app.get('*', (req, res) => {
     res.sendFile(path.resolve(__dirname, '../img', 'index.html'));
 });
 
-app.post("/upload", (req, res) => {
+app.post("/select", (req, res) => {
     setTimeout(() => {
+        console.log(req.files)
         console.log('file uploaded')
         return res.status(200).json({ result: true, msg: 'file uploaded' });
     }, 3000);
 });
 
-app.post("/select", (req, res) => {
-        // console.log('file selected')
+app.post("/upload", (req, res) => {
         let fileIndex = 1;
-        // console.log(req.body.name)
 
         // if (fs.existsSync(`img/${req.body.name}${req.files.file.name}`)) {
         //     fs.rmdir(`img/${req.body.name}${req.files.file.name}`, err => {

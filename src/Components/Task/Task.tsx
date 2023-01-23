@@ -44,9 +44,9 @@ function Task (props: {projectId: number, currentTaskId: number, currentStatus: 
                     <div className="task-row task-more-information">
                         <div className="task-row__item">{task.description ? task.description : "Описание не задано"}</div>
                     </div>
-                    <div className="task-row">
+                    {/* <div className="task-row">
                         <div className="task-row__item">{task.description ? task.description : "Описание не задано"}</div>
-                    </div>
+                    </div> */}
                     <div className="task-row">
                         <div className="task-row__item">Завершена: {task.dateOfDone ? task.dateOfDone: '-'}</div> 
                         <div className="task-row__item">В разработке: {task.timeInDev ? task.timeInDev : '-'}</div>
