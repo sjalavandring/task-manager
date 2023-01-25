@@ -26,7 +26,6 @@ function NewTaskForm (props: {projectId: number}) {
     const UploadButtonWithDoneMessage = () => {
         useItemFinishListener((item) => {
             setUploadFinished((finished: UploadedFileType[]) =>  {
-                console.log(isWindowOpened)
                 return finished.concat({name: `Project${props.projectId}Task${taskListInfo[0].tasks.length + taskListInfo[1].tasks.length + taskListInfo[2].tasks.length + 1}File(s)`, type: `${(item.file.type)}`,  data: item.file, id: finished.length});
             })
         });
@@ -68,9 +67,11 @@ function NewTaskForm (props: {projectId: number}) {
                 dispatch({type: "add_task", project: props.projectId, title: taskTitle, priority: parseInt(taskPriority)})
             }
             if (uploadFinished.length > 0) {
-                let uploadedFile = new FormData();
-                uploadedFile.append('file', uploadFinished[0].data, `Project${props.projectId}Task${taskListInfo[0].tasks.length + taskListInfo[1].tasks.length + taskListInfo[2].tasks.length + 1}`)
-                axios.post("http://localhost:3001/upload", uploadedFile)
+                let uploadedFiles = new FormData();
+                uploadFinished.forEach((item, id) => {
+                    uploadedFiles.append('file', uploadFinished[id].data)
+                })
+                axios.post("http://localhost:3001/upload", uploadedFiles)
                     .then((res) => {
                         console.log(res)
                     })

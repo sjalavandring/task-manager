@@ -8,7 +8,6 @@ type storeState = {
     taskInfoReducer: taskListType[],
 }
 
-
 function Task (props: {projectId: number, currentTaskId: number, currentStatus: number}) {
     const dispatch = useDispatch()
     const taskListInfo = useSelector((state: any) => state.taskInfoReducer[props.projectId].projectInfo)
@@ -26,7 +25,7 @@ function Task (props: {projectId: number, currentTaskId: number, currentStatus: 
         <>
             <div className={isWindowOpened.isNewSubtaskAdding && subtaskWindowVisible ? "shadowBack " : ""} onClick={() => {dispatch({type: "toggle_new_subtask_window_status"}); setSubtaskWindowVisible(false)}}></div>
             {isWindowOpened.isNewSubtaskAdding && subtaskWindowVisible ? <NewSubtaskForm projectId={props.projectId} currentStatus={props.currentStatus} currentTaskId={props.currentTaskId} closeSubtasskform={closeSubtasskform}/> : undefined}
-            <div className="task task-container" key={task.id} onClick={() => console.log(props, props.currentStatus)}>
+            <div className="task task-container" key={task.id}>
                 <div className="task-row">
                     <div className="task-row__item task-title"><b>{`${task.id}. ${task.title}`}</b></div>
                     <div className="task-row__item">
@@ -68,7 +67,7 @@ function Subtask (props: {projectId: number, currentTaskId: number, currentStatu
     let subtask = taskListInfo[props.currentStatus].tasks[props.currentTaskId].subtasks[props.subtaskId]
 
     return (
-        <div className="subtask" key={subtask.id} onClick={() => console.log(props)}>
+        <div className="subtask" key={subtask.id}>
             <div className="task-row">
                 <div className="task-row__item task-title"><b>{`${props.currentTaskId + 1}.${subtask.id}. ${subtask.title}`}</b></div>
                 <div className="task-row__item">

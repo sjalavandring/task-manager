@@ -19,15 +19,14 @@ app.get('*', (req, res) => {
 });
 
 app.post("/select", (req, res) => {
-    setTimeout(() => {
-        console.log(req.files)
-        console.log('file uploaded')
-        return res.status(200).json({ result: true, msg: 'file uploaded' });
-    }, 3000);
+    // console.log(req.files)
+    // console.log('file uploaded')
+    return res.status(200).json({ result: true, msg: 'file uploaded'});
 });
 
 app.post("/upload", (req, res) => {
         let fileIndex = 1;
+        console.log(req.data)
 
         // if (fs.existsSync(`img/${req.body.name}${req.files.file.name}`)) {
         //     fs.rmdir(`img/${req.body.name}${req.files.file.name}`, err => {
@@ -41,19 +40,19 @@ app.post("/upload", (req, res) => {
         //     console.log('Folder created');
         // });
 
-        function fileRecorder () {
-            if (fs.existsSync(`img/${req.body.name}File${fileIndex}${req.files.file.name.slice(req.files.file.name.lastIndexOf('.'))}`)) {
-                fileIndex++
-                fileRecorder ()
-            } else {
-                fs.appendFile(`img/${req.body.name}File${fileIndex}${req.files.file.name.slice(req.files.file.name.lastIndexOf('.'))}`, req.files.file.data, function(){})
-            }
-        }
+        // function fileRecorder () {
+        //     if (fs.existsSync(`img/${req.files.file.name}File${fileIndex}${req.files.file.name.slice(req.files.file.name.lastIndexOf('.'))}`)) {
+        //         fileIndex++
+        //         fileRecorder ()
+        //     } else {
+        //         fs.appendFile(`img/${req.files.file.name}File${fileIndex}${req.files.file.name.slice(req.files.file.name.lastIndexOf('.'))}`, req.files.file.data, function(){})
+        //     }
+        // }
 
-        fileRecorder ();
+        // fileRecorder ();
 
         // fs.appendFile(`img/${req.body.name}File${fileIndex}${req.files.file.name.slice(req.files.file.name.lastIndexOf('.'))}`, req.files.file.data, function(){})
-        return res.status(200).json({ result: true, msg: 'file selected' });
+        return res.status(200).json({ result: true, msg: 'file uploaded'});
 });
 
 app.delete("/upload", (req, res) => {
