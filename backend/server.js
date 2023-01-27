@@ -24,7 +24,7 @@ app.post("/select", (req, res) => {
 
 app.post("/upload", (req, res) => {
         let fileIndex = 1;
-
+        console.log(req.files.file)
         // if (fs.existsSync(`img/${req.body.name}${req.files.file.name}`)) {
         //     fs.rmdir(`img/${req.body.name}${req.files.file.name}`, err => {
         //         if(err) throw err;

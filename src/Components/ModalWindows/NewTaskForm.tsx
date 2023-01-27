@@ -25,6 +25,7 @@ function NewTaskForm (props: {projectId: number}) {
 
     const UploadButtonWithDoneMessage = () => {
         useItemFinishListener((item) => {
+            setUploadFinished([] as UploadedFileType[])
             setUploadFinished((finished: UploadedFileType[]) =>  {
                 return finished.concat({
                     name: `Project${props.projectId}Task${taskListInfo[0].tasks.length + taskListInfo[1].tasks.length + taskListInfo[2].tasks.length + 1}File(s)`,
@@ -57,6 +58,7 @@ function NewTaskForm (props: {projectId: number}) {
             if (uploadFinished[0].type.slice(0, 5) != ('image' || 'video')) {
                 return (
                     <>
+                        <img src={uploadedFile} alt="uploadedFile" />
                         <div key="name" className="upload-imaga__name">Загружено: {uploadFinished[0].name}</div>
                     </>
                 )
@@ -77,7 +79,7 @@ function NewTaskForm (props: {projectId: number}) {
 
                 let uploadedFiles = new FormData();
                 uploadFinished.forEach((item, id) => {
-                    uploadedFiles.append('file', uploadFinished[id].data, `Project${props.projectId}Task${taskListInfo[0].tasks.length + taskListInfo[1].tasks.length + taskListInfo[2].tasks.length + 1}`)
+                    uploadedFiles.append('file', uploadFinished[id].data, `Project${props.projectId}Task${taskListInfo[0].tasks.length + taskListInfo[1].tasks.length + taskListInfo[2].tasks.length + 1}${uploadFinished[id].data.name.slice(uploadFinished[id].data.name.lastIndexOf('.'))}`)
                 })
 
                 axios.post("http://localhost:3001/upload", uploadedFiles)
@@ -106,9 +108,9 @@ function NewTaskForm (props: {projectId: number}) {
                 <div className="new-task-form-block">
                     <textarea className="new-task-form__item new-task-form__textarea" maxLength={300}  placeholder="Описание задачи (до 300 символов)" onChange={(element) => setTaskDescription(element.target.value != '' ? element.target.value : "Описание не добавлено")}/>
                     <div className="new-task-form__item upload-image-block">
-                        <UploadButton onClick={() => setUploadFinished([] as UploadedFileType[])}>Загрузить файл</UploadButton>
+                        <UploadButton>Загрузить файл</UploadButton>
                         <div className="upload-image-container">
-                            {/* <UploadPrewiev loadFirstOnly={true} videoMimeTypes={undefined}/> */}
+                            <UploadPrewiev loadFirstOnly={true} videoMimeTypes={undefined}/>
                             <UploadPrewiev loadFirstOnly={true} PreviewComponent={UploadButtonWithDoneMessage}/>
                         </div>
                     </div>
