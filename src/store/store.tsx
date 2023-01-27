@@ -115,9 +115,9 @@ let taskInfoReducer = (state = taskListInfo, action: any) => {
             return newState
             
         case 'add_new_task_files':
-            // newProjectsTasks = structuredClone(state[action.project].projectInfo[0].tasks)
-            // newProjectsTasks[newProjectsTasks.length] = {...newProjectsTasks[newProjectsTasks.length], files: action.files}
-            // newState[action.project].projectInfo[0].tasks = structuredClone(newProjectsTasks)
+            newProjectsTasks = structuredClone(state[action.project].projectInfo[0].tasks)
+            newProjectsTasks[newProjectsTasks.length] = {...newProjectsTasks[newProjectsTasks.length], files: action.files}
+            newState[action.project].projectInfo[0].tasks = structuredClone(newProjectsTasks)
             console.log(action.files)
             return state
             // return newState

@@ -24,7 +24,9 @@ app.post("/select", (req, res) => {
 
 app.post("/upload", (req, res) => {
         let fileIndex = 1;
-        console.log(req.files.file)
+        let fileName = req.files.file.name;
+        let fileExtension = req.files.file.name.slice(req.files.file.name.lastIndexOf('.'));
+        let fileExtensionIndex = req.files.file.name.lastIndexOf(fileExtension);
         // if (fs.existsSync(`img/${req.body.name}${req.files.file.name}`)) {
         //     fs.rmdir(`img/${req.body.name}${req.files.file.name}`, err => {
         //         if(err) throw err;
@@ -38,17 +40,16 @@ app.post("/upload", (req, res) => {
         // });
 
         function fileRecorder () {
-            if (fs.existsSync(`img/${req.files.file.name}File${fileIndex}.${req.files.file.mimetype.slice(req.files.file.mimetype.lastIndexOf('/') + 1)}`)) {
+            fileName = fileName.split('').slice(0, fileExtensionIndex).join('') + `File${fileIndex}` + fileExtension
+            if (fs.existsSync(`img/${fileName}`)) {
                 fileIndex++
                 fileRecorder ()
             } else {
-                fs.appendFile(`img/${req.files.file.name}File${fileIndex}.${req.files.file.mimetype.slice(req.files.file.mimetype.lastIndexOf('/') + 1)}`, req.files.file.data, function(){})
+                fs.appendFile(`img/${fileName}`, req.files.file.data, function(){})
             }
         }
 
         fileRecorder ();
-
-        // fs.appendFile(`img/${req.body.name}File${fileIndex}.${req.files.file.mimetype.slice(req.files.file.mimetype.lastIndexOf('/') + 1)}`, req.files.file.data, function(){})
         return res.status(200).json({ result: true, msg: 'file uploaded'});
 });
 

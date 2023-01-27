@@ -1,8 +1,7 @@
-import React, { useEffect, useState, useMemo } from 'react'
+import React, { useState } from 'react'
 import axios from "axios";
 import uploadedFile from '../../img/uploadedFile.png'
 import { useSelector, useDispatch } from 'react-redux/es/exports'
-import type {ModalInfoType} from './../../store/store';
 import Uploady, { useItemFinishListener } from '@rpldy/uploady';
 import UploadButton from '@rpldy/upload-button';
 import UploadPrewiev from  '@rpldy/upload-preview';
@@ -16,7 +15,7 @@ type UploadedFileType = {
 
 function NewTaskForm (props: {projectId: number}) {
     const dispatch = useDispatch()
-    let taskListInfo = useSelector((state: any) => state.projectsInfoReducer[props.projectId].projectInfo)
+    let taskListInfo = useSelector((state: any) => state.taskInfoReducer[props.projectId].projectInfo)
     let isWindowOpened = useSelector((state: any) => state.modalWindowsReducer)
     let [taskTitle, setTaskTitle] = useState('')
     let [taskDescription, setTaskDescription] = useState('')
@@ -28,12 +27,8 @@ function NewTaskForm (props: {projectId: number}) {
             setUploadFinished([] as UploadedFileType[])
             setUploadFinished((finished: UploadedFileType[]) =>  {
                 return finished.concat({
-                    name: `Project${props.projectId}Task${taskListInfo[0].tasks.length + taskListInfo[1].tasks.length + taskListInfo[2].tasks.length + 1}File(s)`,
+                    name: item.file.name,
                     data: item.file,
-                    // {
-                    //     ...item.file, 
-                    //     name: `Project${props.projectId}Task${taskListInfo[0].tasks.length + taskListInfo[1].tasks.length + taskListInfo[2].tasks.length + 1}File(s)`
-                    // }, 
                     type: `${(item.file.type)}`, 
                     id: finished.length
                 });
@@ -89,7 +84,6 @@ function NewTaskForm (props: {projectId: number}) {
                     .catch((err) => {
                         console.log(err)
                     })
-                console.log(uploadFinished)
                 dispatch({type: "add_new_task_files", files: uploadFinished})
             }
             dispatch({type: "toggle_new_task_window_status"})
