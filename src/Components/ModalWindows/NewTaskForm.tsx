@@ -41,27 +41,25 @@ function NewTaskForm (props: {projectId: number}) {
 
         if (uploadFinished[0]) {
             if (uploadFinished[0].type.slice(0, 5) == 'image') {
-                if (uploadFinished[0].type.slice(0, 5) == 'image') {
-                    return (
-                        <>
-                            <div key="name" className="upload-imaga__name">Загружено: {uploadFinished[0].name}</div>
-                        </>
-                    )
-                } else 
-                if (uploadFinished[0].type.slice(0, 5) == 'video') {
-                    return (
-                        <>
-                            <div key="name" className="upload-imaga__name">Загружено: {uploadFinished[0].name}</div>
-                        </>
-                    )
-                } else 
-                if (uploadFinished[0].type.slice(0, 5) != ('image' || 'video')) {
-                    return (
-                        <>
-                            <div key="name" className="upload-imaga__name">Загружено: {uploadFinished[0].name}</div>
-                        </>
-                    )
-                }
+                return (
+                    <>
+                        <div key="name" className="upload-imaga__name">Загружено: {uploadFinished[0].name}</div>
+                    </>
+                )
+            } else 
+            if (uploadFinished[0].type.slice(0, 5) == 'video') {
+                return (
+                    <>
+                        <div key="name" className="upload-imaga__name">Загружено: {uploadFinished[0].name}</div>
+                    </>
+                )
+            } else 
+            if (uploadFinished[0].type.slice(0, 5) != ('image' || 'video')) {
+                return (
+                    <>
+                        <div key="name" className="upload-imaga__name">Загружено: {uploadFinished[0].name}</div>
+                    </>
+                )
             }
         }
         return <></>
@@ -79,7 +77,6 @@ function NewTaskForm (props: {projectId: number}) {
 
                 let uploadedFiles = new FormData();
                 uploadFinished.forEach((item, id) => {
-                    console.log(uploadFinished[id].data.name.slice(uploadFinished[id].data.name.lastIndexOf('.')))
                     uploadedFiles.append('file', uploadFinished[id].data, `Project${props.projectId}Task${taskListInfo[0].tasks.length + taskListInfo[1].tasks.length + taskListInfo[2].tasks.length + 1}`)
                 })
 
@@ -111,7 +108,7 @@ function NewTaskForm (props: {projectId: number}) {
                     <div className="new-task-form__item upload-image-block">
                         <UploadButton onClick={() => setUploadFinished([] as UploadedFileType[])}>Загрузить файл</UploadButton>
                         <div className="upload-image-container">
-                            <UploadPrewiev loadFirstOnly={true} videoMimeTypes={undefined}/>
+                            {/* <UploadPrewiev loadFirstOnly={true} videoMimeTypes={undefined}/> */}
                             <UploadPrewiev loadFirstOnly={true} PreviewComponent={UploadButtonWithDoneMessage}/>
                         </div>
                     </div>
