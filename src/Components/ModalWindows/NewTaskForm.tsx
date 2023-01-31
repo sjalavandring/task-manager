@@ -8,6 +8,7 @@ import UploadPrewiev from  '@rpldy/upload-preview';
 
 type UploadedFileType = {
     name: string,
+    systemName: string,
     type: string,
     data: any,
     id: number,
@@ -28,6 +29,7 @@ function NewTaskForm (props: {projectId: number}) {
             setUploadFinished((finished: UploadedFileType[]) =>  {
                 return finished.concat({
                     name: item.file.name,
+                    systemName: `Project${props.projectId}Task${taskListInfo[0].tasks.length + taskListInfo[1].tasks.length + taskListInfo[2].tasks.length + 1}`,
                     data: item.file,
                     type: `${(item.file.type)}`, 
                     id: finished.length
@@ -84,7 +86,7 @@ function NewTaskForm (props: {projectId: number}) {
                     .catch((err) => {
                         console.log(err)
                     })
-                dispatch({type: "add_new_task_files", files: uploadFinished})
+                dispatch({type: "add_new_task_files", project: props.projectId, files: uploadFinished})
             }
             dispatch({type: "toggle_new_task_window_status"})
         } else {
