@@ -110,14 +110,12 @@ let taskInfoReducer = (state = taskListInfo, action: any) => {
                 priority: action.priority,
             })
             newState[action.project].projectInfo[action.taskStatus].tasks[action.taskId].subtasks = structuredClone(newSubtasks)
-            console.log(newState)
             return newState
         case 'add_new_task_files':
             let newProjectsTasksWithFiles = structuredClone(state[action.project].projectInfo[0].tasks)
             newProjectsTasksWithFiles[newProjectsTasksWithFiles.length - 1] = {...newProjectsTasksWithFiles[newProjectsTasksWithFiles.length - 1], files: action.files}
             console.log(newProjectsTasksWithFiles)
             newState[action.project].projectInfo[0].tasks = structuredClone(newProjectsTasksWithFiles)
-            console.log(newState)
             return newState
             // return newState
         case 'add_new_project':
@@ -127,7 +125,7 @@ let taskInfoReducer = (state = taskListInfo, action: any) => {
                 title: action.projectTitle,
                 projectInfo: [
                     {id: 1, status: "Queue", tasks: []},
-                    {id: 2, status: "Development", tasks: []},
+                    {id: 2, status: "Development", tasks: []},-
                     {id: 3, status: "Done", tasks: []},
                 ]
             }) 

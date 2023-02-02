@@ -1,8 +1,10 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import warningImg from  '../../img/warning.jpg'
 import type {taskListType} from './../../store/store';
 import { useSelector, useDispatch } from 'react-redux/es/exports'
 import NewSubtaskForm from '../ModalWindows/NewSubtaskForm';
+import { response } from 'express';
 
 type storeState = {
     taskInfoReducer: taskListType[],
@@ -20,6 +22,18 @@ function Task (props: {projectId: number, currentTaskId: number, currentStatus: 
     function closeSubtasskform () {
         setSubtaskWindowVisible(false)
     }
+
+    async function getData() {
+        await axios.get('http://localhost:3001/getinfo')
+        .then((res) => {
+            console.log(res)
+        })
+        .catch((err) => {
+            console.log(err)
+        })
+    }
+    
+    getData()
 
     return (
         <>
@@ -42,6 +56,7 @@ function Task (props: {projectId: number, currentTaskId: number, currentStatus: 
                 <div className={"" + (isMoreInfoVisible ? "" : "inactive")}>
                     <div className="task-row task-more-information">
                         <div className="task-row__item">{task.description ? task.description : "Описание не задано"}</div>
+                        <div className="task-row__item task-files"></div> 
                     </div>
                     {/* <div className="task-row">
                         <div className="task-row__item">{task.description ? task.description : "Описание не задано"}</div>

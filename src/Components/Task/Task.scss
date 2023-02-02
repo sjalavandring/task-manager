@@ -27,6 +27,12 @@
     -webkit-tap-highlight-color: transparent;
 }
 
+.task-files {
+    // height: 100%;
+    // width: 50px;
+    // border: 2px solid black;
+}
+
 .subtask {
     @extend .task;
     width: 85%;

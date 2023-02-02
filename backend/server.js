@@ -2,6 +2,7 @@ const express = require('express');
 const fileupload = require("express-fileupload");
 const cors = require('cors');
 const fs = require("fs");
+const { response } = require('express');
 
 const app = express();
 
@@ -14,8 +15,9 @@ app.get("/api", (req, res) => {
     })
 })
 
-app.get('*', (req, res) => {
-    res.sendFile(path.resolve(__dirname, '../img', 'index.html'));
+app.get("/getinfo", (req, res) => {
+    // res.sendFile(path.resolve(__dirname, '../img', 'Project0Task2File1'));
+    return res.send({text: 'connected '})
 });
 
 app.post("/select", (req, res) => {
@@ -27,6 +29,7 @@ app.post("/upload", (req, res) => {
         let fileName = req.files.file.name;
         let fileExtension = req.files.file.name.slice(req.files.file.name.lastIndexOf('.'));
         let fileExtensionIndex = req.files.file.name.lastIndexOf(fileExtension);
+
         // if (fs.existsSync(`img/${req.body.name}${req.files.file.name}`)) {
         //     fs.rmdir(`img/${req.body.name}${req.files.file.name}`, err => {
         //         if(err) throw err;
