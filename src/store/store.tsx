@@ -31,12 +31,12 @@ type taskListType = {
         }[] | [],
     }[] | [],
 }
+
 type ProjectsListType = {
     id: number,
     title: string,
     projectInfo: taskListType[]
 }
-
 
 let taskListInfo: ProjectsListType[] = [
     {
@@ -83,13 +83,13 @@ let modalWindowsStatus = {
     isNewProjectAdding: false,
 }
 
-let taskInfoReducer = (state = taskListInfo, action: any) => {
+let taskInfoReducer = (state: any = taskListInfo, action: any) => {
     let newState = structuredClone(state);
     switch (action.type) {
         case "add_task" :
             let newProjectsTasks = structuredClone(state[action.project].projectInfo[0].tasks)
             newProjectsTasks.push({
-                id: state[action.project].projectInfo[0].tasks.length + 1, 
+                id: state[action.project].projectInfo[0].tasks.length + state[action.project].projectInfo[1].tasks.length + state[action.project].projectInfo[2].tasks.length + 1, 
                 type: "task",
                 title: action.title, 
                 dateOfCreate: (new Date()).toISOString().slice(0,10),
@@ -98,7 +98,8 @@ let taskInfoReducer = (state = taskListInfo, action: any) => {
                 subtasks: []
             })
             newState[action.project].projectInfo[0].tasks = structuredClone(newProjectsTasks)
-            return newState
+            console.log(state)
+            return newState 
         case "add_subtask": 
             let newSubtasks = structuredClone(state[action.project].projectInfo[action.taskStatus].tasks[action.taskId].subtasks);
             newSubtasks.push({
@@ -117,7 +118,6 @@ let taskInfoReducer = (state = taskListInfo, action: any) => {
             console.log(newProjectsTasksWithFiles)
             newState[action.project].projectInfo[0].tasks = structuredClone(newProjectsTasksWithFiles)
             return newState
-            // return newState
         case 'add_new_project':
             let newProjectsList = structuredClone(state)
             newProjectsList.push({
@@ -125,30 +125,45 @@ let taskInfoReducer = (state = taskListInfo, action: any) => {
                 title: action.projectTitle,
                 projectInfo: [
                     {id: 1, status: "Queue", tasks: []},
-                    {id: 2, status: "Development", tasks: []},-
+                    {id: 2, status: "Development", tasks: []},
                     {id: 3, status: "Done", tasks: []},
                 ]
             }) 
             console.log(newProjectsList)
             return newProjectsList
+        case "move_to_development":
+            let taskId = action.searchedId;
+            let queueTasks = newState[action.projectId].projectInfo.find((info: any) => info.id == action.moveTaskFrom + 1);
+            if (queueTasks) {
+              let taskIndex = queueTasks.tasks.findIndex((task: any, taskIndex: number) => task.id  == taskId);
+              if (taskIndex !== -1) {
+                let taskToMove = queueTasks.tasks.splice(taskIndex, 1)[0]; // Удаляем задачу из очереди и получаем ее
+                let developmentTasks = newState[action.projectId].projectInfo.find((info: any) => info.id== action.moveTaskTo + 1);
+                if (developmentTasks) {
+                  developmentTasks.tasks.push(taskToMove); // Добавляем задачу в раздел "Development"
+                }
+              }
+            }
+            console.log(newState)
+            return newState;
         default: 
             return state
     }
 }
 
 let modalWindowsReducer = (state = modalWindowsStatus, action: any) => {
-        switch (action.type) {
-            case 'toggle_new_task_window_status':
-                return {...state, isNewTaskAdding: !state.isNewTaskAdding}
-            case 'toggle_new_subtask_window_status':
-                return {...state, isNewSubtaskAdding: !state.isNewSubtaskAdding}
-            case 'toggle_new_project_window_status':
-                return {...state, isNewProjectAdding: !state.isNewProjectAdding}
-            case 'reset_all': 
-                return {...state, isNewSubtaskAdding: false, isNewTaskAdding: false}
-            default: 
-                return state
-        }  
+    switch (action.type) {
+        case 'toggle_new_task_window_status':
+            return {...state, isNewTaskAdding: !state.isNewTaskAdding}
+        case 'toggle_new_subtask_window_status':
+            return {...state, isNewSubtaskAdding: !state.isNewSubtaskAdding}
+        case 'toggle_new_project_window_status':
+            return {...state, isNewProjectAdding: !state.isNewProjectAdding}
+        case 'reset_all': 
+            return {...state, isNewSubtaskAdding: false, isNewTaskAdding: false}
+        default: 
+            return state
+    }
 }
 
 let projectsInfoReducer = (state = taskListInfo, action: any) => {
@@ -172,7 +187,7 @@ let projectsInfoReducer = (state = taskListInfo, action: any) => {
     }
 }
 
-const rootReducer = combineReducers({taskInfoReducer, modalWindowsReducer, projectsInfoReducer})
+const rootReducer = combineReducers({ modalWindowsReducer, projectsInfoReducer, taskInfoReducer})
 
 const store = createStore(rootReducer)
 

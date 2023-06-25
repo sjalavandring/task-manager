@@ -1,11 +1,8 @@
 import React, { useState, useEffect } from 'react'
-import warningImg from  '../../img/warning.jpg'
-import { useDrag, useDrop } from 'react-dnd';
 import { useSelector, useDispatch } from 'react-redux/es/exports'
 import type {taskListType} from './../../store/store';
 import NewTaskForm from '../ModalWindows/NewTaskForm';
-import Task from '../Task/Task';
-import NewSubtaskForm from '../ModalWindows/NewSubtaskForm';
+import TaskColumn from './TasksColumn';
 
 type storeState = {
     modalWindowsReducer: taskListType[],
@@ -13,25 +10,14 @@ type storeState = {
 
 function TaskManager (props: {projectId: number}) {
     const dispatch = useDispatch()
-    let taskListInfo = useSelector((state: any) => state.taskInfoReducer[props.projectId].projectInfo)
+    let taskListInfo = useSelector((state: any) => state.taskInfoReducer)
     let isWindowOpened = useSelector((state: any) => state.modalWindowsReducer)
 
-    let taskList =  taskListInfo.map((column: any, columnId: number) => {
+    let taskList = taskListInfo ? taskListInfo[props.projectId].projectInfo.map((column: any, columnId: number) => {
         return (
-            <div className="tasks-column" key={columnId}>
-                <div className="tasks-list" >
-                    <div className={"task-list-title " + `column-${column.status}` }>{column.status}</div>
-                    <div className='task-box'>  
-                        {column.tasks.map((task: any, taskId: number) => {
-                            return (
-                                <Task currentStatus={columnId} currentTaskId={taskId} projectId={props.projectId} key={taskId}/>
-                            )
-                        })}
-                    </div>
-                </div>
-            </div>
+            <TaskColumn projectId={props.projectId} column={column} columnId={columnId}/>
         )
-    })
+    }) : null
 
     return (
         <>

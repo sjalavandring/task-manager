@@ -16,8 +16,8 @@ app.get("/api", (req, res) => {
 })
 
 app.get("/getinfo", (req, res) => {
-    // res.sendFile(path.resolve(__dirname, '../img', 'Project0Task2File1'));
-    return res.send({text: 'connected '})
+    return res.sendFile(path.resolve(__dirname, '../img', 'Project0Task3File1'));
+    // return res.send({text: 'connected '})
 });
 
 app.post("/select", (req, res) => {
