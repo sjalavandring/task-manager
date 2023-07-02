@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import warningImg from  '../../img/warning.jpg'
 import type {taskListType} from './../../store/store';
@@ -21,7 +21,6 @@ function Task (props: {projectId: number, currentTaskId: number, currentStatus: 
     const taskListInfo = useSelector((state: any) => state.taskInfoReducer[props.projectId].projectInfo)
     const isWindowOpened = useSelector((state: any) => state.modalWindowsReducer)
     let [task, setTask] = useState(structuredClone(taskListInfo[props.currentStatus].tasks[props.currentTaskId]))
-    // console.log(task)
     let [isMoreInfoVisible, setMoreInfoVisible] = useState<boolean>(false)
     let [subtaskWindowVisible, setSubtaskWindowVisible] = useState(false)
 
@@ -35,7 +34,8 @@ function Task (props: {projectId: number, currentTaskId: number, currentStatus: 
         end: (item, monitor) => {
             const dropResult: any = monitor.getDropResult()
             if (item.columnInfo != dropResult.columnId) {
-                dispatch({type: "move_to_development", searchedId: task.id, projectId: props.projectId, moveTaskFrom: item.columnInfo, moveTaskTo: dropResult.columnId})
+                let currentTaskIndex: number = taskListInfo[props.currentStatus].tasks.findIndex((currentTask: any) => currentTask.id == task.id)
+                dispatch({type: "move_to_development", searchedId: currentTaskIndex, projectId: props.projectId, moveTaskFrom: item.columnInfo, moveTaskTo: dropResult.columnId})
             }
         },
         collect: (monitor) => ({
@@ -48,23 +48,25 @@ function Task (props: {projectId: number, currentTaskId: number, currentStatus: 
         setSubtaskWindowVisible(false)
     }
 
-    async function getData() {
-        await axios.get('http://localhost:3001/getinfo')
-        .then((res) => {
-            console.log(res)
-        })
-        .catch((err) => {
-            console.log(err)
-        })
-    }
+    // async function getData() {
+    //     await axios.get('http://localhost:3001/getinfo')
+    //     .then((res) => {
+    //         console.log(res)
+    //     })
+    //     .catch((err) => {
+    //         console.log(err)
+    //     })
+    // }
     
-    getData()
+    // useEffect(() => {
+    //     getData()
+    // })
 
     return (
         <>
             <div className={isWindowOpened.isNewSubtaskAdding && subtaskWindowVisible ? "shadowBack " : ""} onClick={() => {dispatch({type: "toggle_new_subtask_window_status"}); setSubtaskWindowVisible(false)}}></div>
             {isWindowOpened.isNewSubtaskAdding && subtaskWindowVisible ? <NewSubtaskForm projectId={props.projectId} currentStatus={props.currentStatus} currentTaskId={props.currentTaskId} closeSubtasskform={closeSubtasskform}/> : undefined}
-            <div className="task task-container" key={task.id} ref={drag}>
+            <div className="task task-container" key={task.id} ref={drag} onClick={() => dispatch({type: "move_to_development", searchedId: task.id, projectId: props.projectId, moveTaskFrom: 0, moveTaskTo: 1})}>
                 <div className="task-row">
                     <div className="task-row__item task-title"><b>{`${task.id}. ${task.title}`}</b></div>
                     <div className="task-row__item">

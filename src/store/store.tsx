@@ -48,7 +48,7 @@ let taskListInfo: ProjectsListType[] = [
             tasks: [
                 {
                     id: 1, 
-                    title: "Test tusk number one", 
+                    title: "Test task number one", 
                     dateOfCreate: (new Date()).toISOString().slice(0,10),
                     type: "task",
                     description: "test description, test description, test description test description, test description, test description test description, test description, test description test description, test description, test description",
@@ -133,16 +133,25 @@ let taskInfoReducer = (state: any = taskListInfo, action: any) => {
             return newProjectsList
         case "move_to_development":
             let taskId = action.searchedId;
-            let queueTasks = newState[action.projectId].projectInfo.find((info: any) => info.id == action.moveTaskFrom + 1);
+            console.log('taskId', taskId)
+            let queueTasks = newState[action.projectId].projectInfo.find((info: any) => info.id == action.moveTaskFrom + 1)
+            
             if (queueTasks) {
-              let taskIndex = queueTasks.tasks.findIndex((task: any, taskIndex: number) => task.id  == taskId);
-              if (taskIndex !== -1) {
-                let taskToMove = queueTasks.tasks.splice(taskIndex, 1)[0]; // Удаляем задачу из очереди и получаем ее
-                let developmentTasks = newState[action.projectId].projectInfo.find((info: any) => info.id== action.moveTaskTo + 1);
-                if (developmentTasks) {
-                  developmentTasks.tasks.push(taskToMove); // Добавляем задачу в раздел "Development"
+                queueTasks.tasks.forEach((task: any) => console.log(task.id, taskId))
+                // let taskIndex = queueTasks.tasks.findIndex((task: any, taskIndex: number) => task.id  == taskId);
+                let taskIndex = taskId
+
+                // console.log(newState[action.projectId].projectInfo.tasks)
+                // let queueTasks = newState[action.projectId].projectInfo.tasks[taskId]
+                queueTasks.tasks.forEach((task: any) => console.log(task.id, queueTasks.tasks[0].id))
+                if (taskIndex !== -1) {
+                    let taskToMove = queueTasks.tasks.splice(taskIndex, 1)[0]; // Удаляем задачу из очереди и получаем ее
+                    let developmentTasks = newState[action.projectId].projectInfo.find((info: any) => info.id== action.moveTaskTo + 1);
+                    if (developmentTasks) {
+                     developmentTasks.tasks.push(taskToMove); 
+                    }
                 }
-              }
+                queueTasks.tasks.forEach((task: any) => console.log(task.id, taskId))
             }
             console.log(newState)
             return newState;
